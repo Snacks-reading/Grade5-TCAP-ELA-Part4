@@ -506,16 +506,21 @@
     .btn-ghost {
       background: transparent;
       color: var(--lilac-soft);
-      border: 1px solid rgba(244,239,255,0.4);
+      border: 1px solid rgba(122,90,217,0.6);
     }
 
-    .btn-ghost:hover {
+    .btn-ghost:hover:not(:disabled) {
       background: rgba(244,239,255,0.06);
     }
 
     .btn-primary:hover:not(:disabled) {
       transform: translateY(-1px);
       box-shadow: 0 14px 26px rgba(0,0,0,0.6);
+    }
+
+    .btn-ghost:disabled {
+      opacity: 0.4;
+      cursor: default;
     }
 
     .pill-mini {
@@ -678,7 +683,6 @@
   </div>
 
   <div class="app-shell">
-    <!-- LEFT: DASHBOARD -->
     <aside class="panel">
       <div class="panel-header">
         <div class="title-block">
@@ -749,7 +753,6 @@
       </div>
     </aside>
 
-    <!-- RIGHT: PASSAGE + QUESTION -->
     <main class="panel main-panel">
       <section class="passage-card">
         <div class="passage-label" id="passageLabel">Prompt • Editing Passage</div>
@@ -782,6 +785,7 @@
           </div>
           <div class="nav-right">
             <span class="pill-mini" id="navTag">Subpart 4</span>
+            <button class="btn btn-ghost" id="submitMultiBtn" disabled>Submit answer</button>
             <button class="btn btn-primary" id="nextBtn" disabled>
               Next
               <span id="nextLabelArrow">→</span>
@@ -792,7 +796,6 @@
     </main>
   </div>
 
-  <!-- SUMMARY MODAL -->
   <div class="modal-backdrop" id="summaryModal" data-open="false">
     <div class="modal">
       <h2>Session summary</h2>
@@ -828,7 +831,6 @@
   </div>
 
   <script>
-    // PASSAGES
     const passages = [
       {
         id: "P1",
@@ -867,11 +869,7 @@
       }
     ];
 
-    // QUESTIONS
-    // type: "single" or "multi"
-    // skill: "conventions" | "revision" | "organization"
     const questions = [
-      // P1 – narrative editing
       {
         id: 1,
         passageId: "P1",
@@ -881,26 +879,10 @@
         text: "Which correction is needed for the underlined phrase _were going_?",
         extra: "",
         options: [
-          {
-            text: "was going",
-            correct: true,
-            why: "“Class” is singular, so it needs the singular verb “was.”"
-          },
-          {
-            text: "are going",
-            correct: false,
-            why: "This changes the sentence to present tense instead of past tense."
-          },
-          {
-            text: "were goes",
-            correct: false,
-            why: "This is not a correct verb form in this sentence."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“Class were going” is not correct subject-verb agreement."
-          }
+          { text: "was going", correct: true, why: "“Class” is singular, so it needs the singular verb “was.”" },
+          { text: "are going", correct: false, why: "This changes the sentence to present tense instead of past tense." },
+          { text: "were goes", correct: false, why: "This is not a correct verb form in this sentence." },
+          { text: "No change", correct: false, why: "“Class were going” is not correct subject-verb agreement." }
         ],
         explanation: "The subject “class” is singular, so the correct verb is “was going.”"
       },
@@ -913,26 +895,10 @@
         text: "Which correction is needed for the underlined phrase _have not arrived_?",
         extra: "",
         options: [
-          {
-            text: "has not arrived",
-            correct: true,
-            why: "“Driver” is singular, so it needs the singular verb “has.”"
-          },
-          {
-            text: "have not arrives",
-            correct: false,
-            why: "“Arrives” does not match the helping verb “have.”"
-          },
-          {
-            text: "had not arrive",
-            correct: false,
-            why: "“Arrive” should be “arrived” to match “had.”"
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“Driver have not arrived” is not correct subject-verb agreement."
-          }
+          { text: "has not arrived", correct: true, why: "“Driver” is singular, so it needs the singular verb “has.”" },
+          { text: "have not arrives", correct: false, why: "“Arrives” does not match the helping verb “have.”" },
+          { text: "had not arrive", correct: false, why: "“Arrive” should be “arrived” to match “had.”" },
+          { text: "No change", correct: false, why: "“Driver have not arrived” is not correct subject-verb agreement." }
         ],
         explanation: "The singular subject “driver” needs the singular verb “has not arrived.”"
       },
@@ -945,26 +911,10 @@
         text: "Which option correctly revises the underlined phrase _tap, tapped_?",
         extra: "",
         options: [
-          {
-            text: "tap tapped",
-            correct: false,
-            why: "This removes the comma but still repeats the word awkwardly."
-          },
-          {
-            text: "tap-tapped",
-            correct: false,
-            why: "The hyphen does not show the repeated sound clearly."
-          },
-          {
-            text: "tap, tap",
-            correct: true,
-            why: "The comma separates the repeated word to show the sound pattern clearly."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“tap, tapped” mixes two different verb forms."
-          }
+          { text: "tap tapped", correct: false, why: "This removes the comma but still repeats the word awkwardly." },
+          { text: "tap-tapped", correct: false, why: "The hyphen does not show the repeated sound clearly." },
+          { text: "tap, tap", correct: true, why: "The comma separates the repeated word to show the sound pattern clearly." },
+          { text: "No change", correct: false, why: "“tap, tapped” mixes two different verb forms." }
         ],
         explanation: "“Tap, tap” repeats the same word to show the sound of the rain clearly."
       },
@@ -977,26 +927,10 @@
         text: "Which correction is needed for the underlined word _has_ in “Make sure you has your permission slips”?",
         extra: "",
         options: [
-          {
-            text: "have",
-            correct: true,
-            why: "“You” takes the verb “have,” not “has.”"
-          },
-          {
-            text: "had",
-            correct: false,
-            why: "“Had” changes the time and does not match the sentence."
-          },
-          {
-            text: "haves",
-            correct: false,
-            why: "“Haves” is not a correct verb form."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“You has” is not correct subject-verb agreement."
-          }
+          { text: "have", correct: true, why: "“You” takes the verb “have,” not “has.”" },
+          { text: "had", correct: false, why: "“Had” changes the time and does not match the sentence." },
+          { text: "haves", correct: false, why: "“Haves” is not a correct verb form." },
+          { text: "No change", correct: false, why: "“You has” is not correct subject-verb agreement." }
         ],
         explanation: "The pronoun “you” always uses “have,” not “has.”"
       },
@@ -1009,26 +943,10 @@
         text: "Which revision best improves the phrase _digging quick_?",
         extra: "",
         options: [
-          {
-            text: "digging more quick",
-            correct: false,
-            why: "“More quick” is not standard grammar."
-          },
-          {
-            text: "digging quickly",
-            correct: true,
-            why: "“Quickly” is the correct adverb form to describe how the narrator is digging."
-          },
-          {
-            text: "digging quicklier",
-            correct: false,
-            why: "“Quicklier” is not a correct word."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“Digging quick” uses an adjective instead of an adverb."
-          }
+          { text: "digging more quick", correct: false, why: "“More quick” is not standard grammar." },
+          { text: "digging quickly", correct: true, why: "“Quickly” is the correct adverb form to describe how the narrator is digging." },
+          { text: "digging quicklier", correct: false, why: "“Quicklier” is not a correct word." },
+          { text: "No change", correct: false, why: "“Digging quick” uses an adjective instead of an adverb." }
         ],
         explanation: "Adverbs describe how an action happens, so “quickly” is the best choice."
       },
@@ -1041,31 +959,13 @@
         text: "Which sentence best combines the ideas in “There it was. I held it up, relieved.”?",
         extra: "",
         options: [
-          {
-            text: "I found it in the front pocket and I was relieved.",
-            correct: false,
-            why: "This is correct but less precise and a bit wordy."
-          },
-          {
-            text: "I found it in the front pocket, relieved.",
-            correct: false,
-            why: "“Relieved” is not clearly connected to the subject."
-          },
-          {
-            text: "Relieved, I found it in the front pocket.",
-            correct: false,
-            why: "This suggests the narrator was relieved before finding it."
-          },
-          {
-            text: "I found it in the front pocket, and I was relieved to see it.",
-            correct: true,
-            why: "This clearly shows both the action and the feeling in one smooth sentence."
-          }
+          { text: "I found it in the front pocket and I was relieved.", correct: false, why: "This is correct but less precise and a bit wordy." },
+          { text: "I found it in the front pocket, relieved.", correct: false, why: "“Relieved” is not clearly connected to the subject." },
+          { text: "Relieved, I found it in the front pocket.", correct: false, why: "This suggests the narrator was relieved before finding it." },
+          { text: "I found it in the front pocket, and I was relieved to see it.", correct: true, why: "This clearly shows both the action and the feeling in one smooth sentence." }
         ],
         explanation: "The best revision keeps the meaning and connects the ideas smoothly."
       },
-
-      // P2 – bees informational
       {
         id: 7,
         passageId: "P2",
@@ -1075,26 +975,10 @@
         text: "Which correction is needed for the underlined phrase _a important_?",
         extra: "",
         options: [
-          {
-            text: "an important",
-            correct: true,
-            why: "Words that begin with a vowel sound use “an.”"
-          },
-          {
-            text: "the important",
-            correct: false,
-            why: "“The” changes the meaning and is not needed here."
-          },
-          {
-            text: "important",
-            correct: false,
-            why: "The sentence needs an article before “important.”"
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“A important” does not match the vowel sound at the beginning of “important.”"
-          }
+          { text: "an important", correct: true, why: "Words that begin with a vowel sound use “an.”" },
+          { text: "the important", correct: false, why: "“The” changes the meaning and is not needed here." },
+          { text: "important", correct: false, why: "The sentence needs an article before “important.”" },
+          { text: "No change", correct: false, why: "“A important” does not match the vowel sound at the beginning of “important.”" }
         ],
         explanation: "“Important” begins with a vowel sound, so it needs “an.”"
       },
@@ -1107,26 +991,10 @@
         text: "Which correction is needed for the underlined word _polinashun_?",
         extra: "",
         options: [
-          {
-            text: "pollination",
-            correct: true,
-            why: "This is the correct spelling of the science term."
-          },
-          {
-            text: "polination",
-            correct: false,
-            why: "It is missing an “l.”"
-          },
-          {
-            text: "pollonation",
-            correct: false,
-            why: "It has an extra “o.”"
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "The word is not spelled correctly in the passage."
-          }
+          { text: "pollination", correct: true, why: "This is the correct spelling of the science term." },
+          { text: "polination", correct: false, why: "It is missing an “l.”" },
+          { text: "pollonation", correct: false, why: "It has an extra “o.”" },
+          { text: "No change", correct: false, why: "The word is not spelled correctly in the passage." }
         ],
         explanation: "“Pollination” is the correct spelling for the process bees help with."
       },
@@ -1139,26 +1007,10 @@
         text: "Which revision best corrects the sentence with the underlined phrase _wax combs it_?",
         extra: "Honey is stored in _wax combs it_ protects the hive’s food supply.",
         options: [
-          {
-            text: "Honey is stored in wax combs, it protects the hive’s food supply.",
-            correct: false,
-            why: "This is still a run-on sentence joined only by a comma."
-          },
-          {
-            text: "Honey is stored in wax combs; it protects the hive’s food supply.",
-            correct: true,
-            why: "The semicolon correctly joins two related complete sentences."
-          },
-          {
-            text: "Honey is stored in wax combs it protects the hive’s food supply.",
-            correct: false,
-            why: "This is still a run-on sentence with no punctuation."
-          },
-          {
-            text: "Honey is stored in wax combs and it protects the hive’s food supply.",
-            correct: false,
-            why: "This is grammatical but less precise than separating the two ideas."
-          }
+          { text: "Honey is stored in wax combs, it protects the hive’s food supply.", correct: false, why: "This is still a run-on sentence joined only by a comma." },
+          { text: "Honey is stored in wax combs; it protects the hive’s food supply.", correct: true, why: "The semicolon correctly joins two related complete sentences." },
+          { text: "Honey is stored in wax combs it protects the hive’s food supply.", correct: false, why: "This is still a run-on sentence with no punctuation." },
+          { text: "Honey is stored in wax combs and it protects the hive’s food supply.", correct: false, why: "This is grammatical but less precise than separating the two ideas." }
         ],
         explanation: "A semicolon correctly joins two closely related complete sentences."
       },
@@ -1171,26 +1023,10 @@
         text: "Which correction is needed for the underlined phrase _wouldn’t grow good_?",
         extra: "",
         options: [
-          {
-            text: "wouldn’t grow well",
-            correct: true,
-            why: "“Well” is the correct adverb to describe how something grows."
-          },
-          {
-            text: "wouldn’t grows good",
-            correct: false,
-            why: "“Grows” does not match “wouldn’t.”"
-          },
-          {
-            text: "wouldn’t grow goodly",
-            correct: false,
-            why: "“Goodly” is not used this way in standard English."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“Grow good” is not standard grammar."
-          }
+          { text: "wouldn’t grow well", correct: true, why: "“Well” is the correct adverb to describe how something grows." },
+          { text: "wouldn’t grows good", correct: false, why: "“Grows” does not match “wouldn’t.”" },
+          { text: "wouldn’t grow goodly", correct: false, why: "“Goodly” is not used this way in standard English." },
+          { text: "No change", correct: false, why: "“Grow good” is not standard grammar." }
         ],
         explanation: "Adverbs like “well” describe how something happens, so “grow well” is correct."
       },
@@ -1203,26 +1039,10 @@
         text: "Which sentence best adds a supporting detail about why bees are important to humans?",
         extra: "",
         options: [
-          {
-            text: "Bees are yellow and black and can be noisy.",
-            correct: false,
-            why: "This describes bees but does not explain why they are important to humans."
-          },
-          {
-            text: "Bees pollinate many crops, including apples, almonds, and blueberries that people eat.",
-            correct: true,
-            why: "This gives specific examples of foods that depend on bees."
-          },
-          {
-            text: "Bees sometimes fly near people and make them nervous.",
-            correct: false,
-            why: "This focuses on how people feel, not on why bees are helpful."
-          },
-          {
-            text: "Bees live in many different places around the world.",
-            correct: false,
-            why: "This is a fact but does not show why bees help humans."
-          }
+          { text: "Bees are yellow and black and can be noisy.", correct: false, why: "This describes bees but does not explain why they are important to humans." },
+          { text: "Bees pollinate many crops, including apples, almonds, and blueberries that people eat.", correct: true, why: "This gives specific examples of foods that depend on bees." },
+          { text: "Bees sometimes fly near people and make them nervous.", correct: false, why: "This focuses on how people feel, not on why bees are helpful." },
+          { text: "Bees live in many different places around the world.", correct: false, why: "This is a fact but does not show why bees help humans." }
         ],
         explanation: "Specific examples of crops show clearly how bees help people."
       },
@@ -1235,31 +1055,13 @@
         text: "MULTIPLE SELECT: Select TWO sentences that use capitalization correctly.",
         extra: "You must select both correct sentences to receive credit.",
         options: [
-          {
-            text: "Bees live in groups called Colonies.",
-            correct: false,
-            why: "“Colonies” is not a proper noun here and should not be capitalized."
-          },
-          {
-            text: "Each colony has a queen bee.",
-            correct: true,
-            why: "No words in the middle of the sentence need capital letters."
-          },
-          {
-            text: "Worker Bees gather nectar.",
-            correct: false,
-            why: "“Bees” should not be capitalized in the middle of the sentence."
-          },
-          {
-            text: "Honey is stored in wax combs.",
-            correct: true,
-            why: "The sentence begins with a capital letter and uses lowercase correctly."
-          }
+          { text: "Bees live in groups called Colonies.", correct: false, why: "“Colonies” is not a proper noun here and should not be capitalized." },
+          { text: "Each colony has a queen bee.", correct: true, why: "No words in the middle of the sentence need capital letters." },
+          { text: "Worker Bees gather nectar.", correct: false, why: "“Bees” should not be capitalized in the middle of the sentence." },
+          { text: "Honey is stored in wax combs.", correct: true, why: "The sentence begins with a capital letter and uses lowercase correctly." }
         ],
         explanation: "Only sentences that follow capitalization rules for common and proper nouns are correct."
       },
-
-      // P3 – opinion passage
       {
         id: 13,
         passageId: "P3",
@@ -1269,26 +1071,10 @@
         text: "Which correction is needed for the underlined word _helps_ in “Classroom jobs helps us learn responsibility”?",
         extra: "",
         options: [
-          {
-            text: "help",
-            correct: true,
-            why: "The plural subject “jobs” needs the verb “help.”"
-          },
-          {
-            text: "helped",
-            correct: false,
-            why: "This changes the sentence to past tense."
-          },
-          {
-            text: "has helped",
-            correct: false,
-            why: "This changes the meaning and tense of the sentence."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“Jobs helps” is not correct subject-verb agreement."
-          }
+          { text: "help", correct: true, why: "The plural subject “jobs” needs the verb “help.”" },
+          { text: "helped", correct: false, why: "This changes the sentence to past tense." },
+          { text: "has helped", correct: false, why: "This changes the meaning and tense of the sentence." },
+          { text: "No change", correct: false, why: "“Jobs helps” is not correct subject-verb agreement." }
         ],
         explanation: "Plural subjects like “jobs” use the base verb form “help.”"
       },
@@ -1301,26 +1087,10 @@
         text: "Which correction is needed for the underlined phrase _manage they’re time_?",
         extra: "",
         options: [
-          {
-            text: "manage their time",
-            correct: true,
-            why: "“Their” is the correct possessive pronoun to show ownership."
-          },
-          {
-            text: "manage there time",
-            correct: false,
-            why: "“There” shows a place, not ownership."
-          },
-          {
-            text: "manage they time",
-            correct: false,
-            why: "“They” is a subject pronoun, not possessive."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“They’re” means “they are,” which does not fit here."
-          }
+          { text: "manage their time", correct: true, why: "“Their” is the correct possessive pronoun to show ownership." },
+          { text: "manage there time", correct: false, why: "“There” shows a place, not ownership." },
+          { text: "manage they time", correct: false, why: "“They” is a subject pronoun, not possessive." },
+          { text: "No change", correct: false, why: "“They’re” means “they are,” which does not fit here." }
         ],
         explanation: "The sentence needs the possessive pronoun “their” to show that the time belongs to the students."
       },
@@ -1333,26 +1103,10 @@
         text: "Which sentence best states the writer’s opinion clearly?",
         extra: "",
         options: [
-          {
-            text: "In our classroom, some students think jobs are just extra work.",
-            correct: false,
-            why: "This explains what some students think, not the writer’s opinion."
-          },
-          {
-            text: "Classroom jobs are a good idea because they teach students responsibility.",
-            correct: true,
-            why: "This clearly states the opinion and gives a reason."
-          },
-          {
-            text: "Classroom jobs are something that happens in many schools.",
-            correct: false,
-            why: "This is a fact, not an opinion."
-          },
-          {
-            text: "Classroom jobs can be fun sometimes.",
-            correct: false,
-            why: "This is a weak opinion and does not match the reasons in the passage."
-          }
+          { text: "In our classroom, some students think jobs are just extra work.", correct: false, why: "This explains what some students think, not the writer’s opinion." },
+          { text: "Classroom jobs are a good idea because they teach students responsibility.", correct: true, why: "This clearly states the opinion and gives a reason." },
+          { text: "Classroom jobs are something that happens in many schools.", correct: false, why: "This is a fact, not an opinion." },
+          { text: "Classroom jobs can be fun sometimes.", correct: false, why: "This is a weak opinion and does not match the reasons in the passage." }
         ],
         explanation: "A strong opinion statement clearly shows what the writer believes and gives a reason."
       },
@@ -1365,26 +1119,10 @@
         text: "Which correction is needed for the underlined phrase _should of_ in the last sentence?",
         extra: "",
         options: [
-          {
-            text: "should have",
-            correct: true,
-            why: "“Should have” is the correct verb phrase."
-          },
-          {
-            text: "should had",
-            correct: false,
-            why: "“Should had” is not a correct verb phrase."
-          },
-          {
-            text: "should has",
-            correct: false,
-            why: "“Should has” is not a correct verb phrase."
-          },
-          {
-            text: "No change",
-            correct: false,
-            why: "“Should of” is not standard English."
-          }
+          { text: "should have", correct: true, why: "“Should have” is the correct verb phrase." },
+          { text: "should had", correct: false, why: "“Should had” is not a correct verb phrase." },
+          { text: "should has", correct: false, why: "“Should has” is not a correct verb phrase." },
+          { text: "No change", correct: false, why: "“Should of” is not standard English." }
         ],
         explanation: "The correct phrase is “should have,” not “should of.”"
       },
@@ -1397,31 +1135,13 @@
         text: "MULTIPLE SELECT: Select TWO transitions that would best connect reasons in this opinion essay.",
         extra: "You must select both correct transitions to receive credit.",
         options: [
-          {
-            text: "For example,",
-            correct: true,
-            why: "This introduces a specific example to support a reason."
-          },
-          {
-            text: "In addition,",
-            correct: true,
-            why: "This adds another reason to support the opinion."
-          },
-          {
-            text: "Finally,",
-            correct: false,
-            why: "This is better for a concluding reason, not for connecting reasons in the middle."
-          },
-          {
-            text: "Afterward,",
-            correct: false,
-            why: "This shows time order, not adding reasons."
-          }
+          { text: "For example,", correct: true, why: "This introduces a specific example to support a reason." },
+          { text: "In addition,", correct: true, why: "This adds another reason to support the opinion." },
+          { text: "Finally,", correct: false, why: "This is better for a concluding reason, not for connecting reasons in the middle." },
+          { text: "Afterward,", correct: false, why: "This shows time order, not adding reasons." }
         ],
         explanation: "Opinion writing often uses transitions like “For example,” and “In addition,” to connect reasons."
       },
-
-      // Language-only items (no passage change)
       {
         id: 18,
         passageId: "P1",
@@ -1431,26 +1151,10 @@
         text: "Which sentence uses quotation marks and commas correctly?",
         extra: "",
         options: [
-          {
-            text: "“Check the front pocket” he suggested.",
-            correct: false,
-            why: "It is missing a comma before the closing quotation mark."
-          },
-          {
-            text: "“Check the front pocket,” he suggested.",
-            correct: true,
-            why: "The comma comes before the closing quotation mark, and the sentence is punctuated correctly."
-          },
-          {
-            text: "“Check the front pocket,” He suggested.",
-            correct: false,
-            why: "“He” should not be capitalized in the middle of the sentence."
-          },
-          {
-            text: "“Check the front pocket”. he suggested.",
-            correct: false,
-            why: "The period should be inside the quotation marks."
-          }
+          { text: "“Check the front pocket” he suggested.", correct: false, why: "It is missing a comma before the closing quotation mark." },
+          { text: "“Check the front pocket,” he suggested.", correct: true, why: "The comma comes before the closing quotation mark, and the sentence is punctuated correctly." },
+          { text: "“Check the front pocket,” He suggested.", correct: false, why: "“He” should not be capitalized in the middle of the sentence." },
+          { text: "“Check the front pocket”. he suggested.", correct: false, why: "The period should be inside the quotation marks." }
         ],
         explanation: "Dialogue needs quotation marks and a comma before the closing quotation mark when a tag follows."
       },
@@ -1463,26 +1167,10 @@
         text: "Which sentence uses prepositions correctly?",
         extra: "",
         options: [
-          {
-            text: "The plant sits between the window to the bookshelf.",
-            correct: false,
-            why: "“Between” and “to” do not work together correctly here."
-          },
-          {
-            text: "The plant sits under the window and next of the bookshelf.",
-            correct: false,
-            why: "“Next of” is not a correct prepositional phrase."
-          },
-          {
-            text: "The plant sits near the window and next to the bookshelf.",
-            correct: true,
-            why: "Both “near” and “next to” are correct prepositional phrases."
-          },
-          {
-            text: "The plant sits over the window and beside of the bookshelf.",
-            correct: false,
-            why: "“Beside of” is not standard usage."
-          }
+          { text: "The plant sits between the window to the bookshelf.", correct: false, why: "“Between” and “to” do not work together correctly here." },
+          { text: "The plant sits under the window and next of the bookshelf.", correct: false, why: "“Next of” is not a correct prepositional phrase." },
+          { text: "The plant sits near the window and next to the bookshelf.", correct: true, why: "Both “near” and “next to” are correct prepositional phrases." },
+          { text: "The plant sits over the window and beside of the bookshelf.", correct: false, why: "“Beside of” is not standard usage." }
         ],
         explanation: "“Near the window” and “next to the bookshelf” are both correct prepositional phrases."
       },
@@ -1495,31 +1183,13 @@
         text: "Which sentence uses apostrophes correctly?",
         extra: "",
         options: [
-          {
-            text: "The students playground is everyones favorite place.",
-            correct: false,
-            why: "Both “students” and “everyones” need apostrophes to show possession."
-          },
-          {
-            text: "The students’ playground is everyone’s favorite place.",
-            correct: true,
-            why: "Both possessive nouns are formed correctly."
-          },
-          {
-            text: "The student’s playground is everyones’ favorite place.",
-            correct: false,
-            why: "“Everyones’” is not correct; “everyone” is already singular."
-          },
-          {
-            text: "The students playground is everyones’ favorite place.",
-            correct: false,
-            why: "Neither possessive noun is written correctly."
-          }
+          { text: "The students playground is everyones favorite place.", correct: false, why: "Both “students” and “everyones” need apostrophes to show possession." },
+          { text: "The students’ playground is everyone’s favorite place.", correct: true, why: "Both possessive nouns are formed correctly." },
+          { text: "The student’s playground is everyones’ favorite place.", correct: false, why: "“Everyones’” is not correct; “everyone” is already singular." },
+          { text: "The students playground is everyones’ favorite place.", correct: false, why: "Neither possessive noun is written correctly." }
         ],
         explanation: "Possessive nouns need apostrophes to show ownership."
       },
-
-      // EBSR-style pair
       {
         id: 21,
         passageId: "P1",
@@ -1529,26 +1199,10 @@
         text: "Part A: What can the reader infer about the narrator when the permission slip is missing?",
         extra: "",
         options: [
-          {
-            text: "The narrator does not care about the field trip.",
-            correct: false,
-            why: "The narrator feels worried, not uncaring."
-          },
-          {
-            text: "The narrator is careless and always loses things.",
-            correct: false,
-            why: "The passage does not say this happens often."
-          },
-          {
-            text: "The narrator is responsible and wants to fix the problem.",
-            correct: true,
-            why: "The narrator searches quickly and asks for help to find the slip."
-          },
-          {
-            text: "The narrator is angry at the teacher.",
-            correct: false,
-            why: "The narrator never shows anger toward the teacher."
-          }
+          { text: "The narrator does not care about the field trip.", correct: false, why: "The narrator feels worried, not uncaring." },
+          { text: "The narrator is careless and always loses things.", correct: false, why: "The passage does not say this happens often." },
+          { text: "The narrator is responsible and wants to fix the problem.", correct: true, why: "The narrator searches quickly and asks for help to find the slip." },
+          { text: "The narrator is angry at the teacher.", correct: false, why: "The narrator never shows anger toward the teacher." }
         ],
         explanation: "The narrator’s actions show that they care about solving the problem."
       },
@@ -1561,31 +1215,13 @@
         text: "Part B: MULTIPLE SELECT: Which TWO details from the passage best support the answer to Part A?",
         extra: "You must select both correct details to receive credit.",
         options: [
-          {
-            text: "“Everyone was excited.”",
-            correct: false,
-            why: "This shows how the class feels, not the narrator’s responsibility."
-          },
-          {
-            text: "“I checked my backpack and felt my stomach drop — mine was missing.”",
-            correct: true,
-            why: "This shows the narrator’s worried reaction when the slip is missing."
-          },
-          {
-            text: "“My friend Jordan helped me look.”",
-            correct: false,
-            why: "This shows Jordan’s actions, not the narrator’s responsibility."
-          },
-          {
-            text: "“I know I put it in here,” I said, digging quickly through my papers.",
-            correct: true,
-            why: "This shows the narrator actively searching to fix the problem."
-          }
+          { text: "“Everyone was excited.”", correct: false, why: "This shows how the class feels, not the narrator’s responsibility." },
+          { text: "“I checked my backpack and felt my stomach drop — mine was missing.”", correct: true, why: "This shows the narrator’s worried reaction when the slip is missing." },
+          { text: "“My friend Jordan helped me look.”", correct: false, why: "This shows Jordan’s actions, not the narrator’s responsibility." },
+          { text: "“I know I put it in here,” I said, digging quickly through my papers.", correct: true, why: "This shows the narrator actively searching to fix the problem." }
         ],
         explanation: "Evidence that shows worry and active problem-solving supports the inference about responsibility."
       },
-
-      // More language items
       {
         id: 23,
         passageId: "P2",
@@ -1595,26 +1231,10 @@
         text: "Which sentence uses commas correctly in a compound sentence?",
         extra: "",
         options: [
-          {
-            text: "Bees are helpful to humans too, and they help crops grow.",
-            correct: true,
-            why: "The comma correctly comes before the conjunction joining two complete thoughts."
-          },
-          {
-            text: "Bees are helpful to humans too and, they help crops grow.",
-            correct: false,
-            why: "The comma is in the wrong place."
-          },
-          {
-            text: "Bees are helpful to humans too and they help crops grow.",
-            correct: false,
-            why: "A comma is needed before “and” to join two complete sentences."
-          },
-          {
-            text: "Bees are helpful to humans too, they help crops grow.",
-            correct: false,
-            why: "This is a comma splice joining two sentences with only a comma."
-          }
+          { text: "Bees are helpful to humans too, and they help crops grow.", correct: true, why: "The comma correctly comes before the conjunction joining two complete thoughts." },
+          { text: "Bees are helpful to humans too and, they help crops grow.", correct: false, why: "The comma is in the wrong place." },
+          { text: "Bees are helpful to humans too and they help crops grow.", correct: false, why: "A comma is needed before “and” to join two complete sentences." },
+          { text: "Bees are helpful to humans too, they help crops grow.", correct: false, why: "This is a comma splice joining two sentences with only a comma." }
         ],
         explanation: "A comma before the conjunction correctly joins two complete sentences."
       },
@@ -1627,32 +1247,15 @@
         text: "Which sentence uses end punctuation correctly?",
         extra: "",
         options: [
-          {
-            text: "Should every classroom have jobs for students.",
-            correct: false,
-            why: "This is a question and needs a question mark."
-          },
-          {
-            text: "Every classroom should have jobs for students?",
-            correct: false,
-            why: "This is a statement, not a question."
-          },
-          {
-            text: "Every classroom should have jobs for students.",
-            correct: true,
-            why: "This is a statement and correctly ends with a period."
-          },
-          {
-            text: "Should every classroom have jobs for students!",
-            correct: false,
-            why: "This is a question and should not end with an exclamation mark."
-          }
+          { text: "Should every classroom have jobs for students.", correct: false, why: "This is a question and needs a question mark." },
+          { text: "Every classroom should have jobs for students?", correct: false, why: "This is a statement, not a question." },
+          { text: "Every classroom should have jobs for students.", correct: true, why: "This is a statement and correctly ends with a period." },
+          { text: "Should every classroom have jobs for students!", correct: false, why: "This is a question and should not end with an exclamation mark." }
         ],
         explanation: "Statements end with periods, and questions end with question marks."
       }
     ];
 
-    // STATE
     let currentIndex = 0;
     let answered = {};
     let correctCount = 0;
@@ -1668,7 +1271,6 @@
     let timerInterval = null;
     let isPaused = false;
 
-    // DOM
     const passageLabelEl = document.getElementById("passageLabel");
     const passageTitleEl = document.getElementById("passageTitle");
     const passageBodyEl = document.getElementById("passageBody");
@@ -1688,6 +1290,7 @@
     const navTypeEl = document.getElementById("navType");
     const navTagEl = document.getElementById("navTag");
     const nextBtn = document.getElementById("nextBtn");
+    const submitMultiBtn = document.getElementById("submitMultiBtn");
 
     const scorePercentEl = document.getElementById("scorePercent");
     const scoreBarEl = document.getElementById("scoreBar");
@@ -1719,7 +1322,6 @@
     const closeSummaryBtn = document.getElementById("closeSummaryBtn");
     const restartFromSummaryBtn = document.getElementById("restartFromSummaryBtn");
 
-    // TIMER
     function formatTime(seconds) {
       const m = Math.floor(seconds / 60);
       const s = seconds % 60;
@@ -1771,7 +1373,6 @@
       timerInterval = setInterval(updateTimerDisplay, 1000);
     }
 
-    // RENDER
     function loadQuestion(index) {
       const q = questions[index];
       if (!q) return;
@@ -1801,7 +1402,14 @@
           : "Revision";
       navTagEl.textContent = q.type === "multi" ? "Multiple Select" : "Single Choice";
 
-      // Randomize options
+      if (q.type === "multi") {
+        submitMultiBtn.classList.remove("hidden");
+        submitMultiBtn.disabled = true;
+      } else {
+        submitMultiBtn.classList.add("hidden");
+        submitMultiBtn.disabled = true;
+      }
+
       const optionIndices = q.options.map((_, i) => i);
       for (let i = optionIndices.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -1845,19 +1453,14 @@
     }
 
     function handleOptionClick(btn, q, chosenIndex) {
-      // Multi-select: toggle selection until student hits "Check" (but we’re grading on first click of each option set)
       if (answered[q.id]) return;
 
       if (q.type === "single") {
         gradeSingle(btn, q, chosenIndex);
       } else {
         toggleMulti(btn);
-        // For multi-select, require at least one selection, then grade when student clicks any option again? Better: add a "Check" step.
-        // To keep it simple and still all-or-nothing: grade when student has clicked at least one option and then clicks any option again.
         const selected = getSelectedMultiIndices();
-        if (selected.length > 0) {
-          gradeMulti(q, selected);
-        }
+        submitMultiBtn.disabled = selected.length === 0;
       }
     }
 
@@ -1934,7 +1537,6 @@
         b.disabled = true;
       });
 
-      // Mark correct answers
       allButtons.forEach(b => {
         const idx = Number(b.dataset.optionIndex);
         if (q.options[idx].correct) {
@@ -1974,7 +1576,6 @@
         feedbackIconCorrectEl.classList.add("hidden");
         feedbackIconIncorrectEl.classList.remove("hidden");
 
-        // Build targeted feedback
         const wrongPieces = [];
         selectedIndices.forEach(idx => {
           if (!q.options[idx].correct) {
@@ -1992,6 +1593,7 @@
 
       updateScoreUI();
       nextBtn.disabled = false;
+      submitMultiBtn.disabled = true;
     }
 
     function updateScoreUI() {
@@ -2044,7 +1646,6 @@
       loadQuestion(currentIndex);
     }
 
-    // SUMMARY
     function openSummary() {
       const totalQuestions = questions.length;
       const percent = totalQuestions === 0 ? 0 : Math.round((correctCount / totalQuestions) * 100);
@@ -2070,7 +1671,6 @@
       summaryModalEl.dataset.open = "false";
     }
 
-    // EVENTS
     nextBtn.addEventListener("click", goToNextQuestion);
     restartBtn.addEventListener("click", resetSession);
     summaryBtn.addEventListener("click", openSummary);
@@ -2083,7 +1683,14 @@
     pauseBtn.addEventListener("click", pauseTimer);
     resumeBtn.addEventListener("click", resumeTimer);
 
-    // INIT
+    submitMultiBtn.addEventListener("click", () => {
+      const q = questions[currentIndex];
+      if (!q || q.type !== "multi" || answered[q.id]) return;
+      const selected = getSelectedMultiIndices();
+      if (selected.length === 0) return;
+      gradeMulti(q, selected);
+    });
+
     window.addEventListener("load", () => {
       totalCountEl.textContent = questions.length;
       updateScoreUI();
