@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>TN TCAP Grade 5 ELA – Subpart 4 Practice</title>
-  <style>
+<meta charset="UTF-8" />
+<title>TN TCAP Grade 5 ELA – Subpart 4 Practice</title>
+
+<style>
+
 /* ————————————————————————————————
    LILAC UPGRADED UI — FULL CSS
 ———————————————————————————————— */
@@ -213,406 +215,807 @@ body {
   transition: width 0.25s ease-out;
 }
 
-.score-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 4px;
+/* (CSS continues in next chunk) */
+
+</style>
+</head>
+</head>
+<body>
+
+<!-- Floating Timer -->
+<div class="timer-floating" id="timer" data-state="ok">
+  <div class="timer-dot"></div>
+  <div>
+    <div class="timer-label">Time</div>
+    <div class="timer-value" id="timerValue">00:00</div>
+  </div>
+  <div class="timer-controls">
+    <button class="timer-btn" id="pauseBtn">Pause</button>
+    <button class="timer-btn" id="resumeBtn" disabled>Resume</button>
+  </div>
+</div>
+
+<div class="app-shell">
+
+  <!-- LEFT PANEL -->
+  <aside class="panel">
+    <div class="panel-header">
+      <div class="title-block">
+        <h1>TN TCAP ELA Engine</h1>
+        <p>Grade 5 • Subpart 4 – Editing & Language</p>
+      </div>
+      <span class="chip">Practice Set</span>
+    </div>
+
+    <div class="avatar-row">
+      <div class="avatar"></div>
+      <div class="avatar-text">
+        <div><strong>Your Guide:</strong> Lilac Model</div>
+        <div>Fix the sentence. Strengthen the meaning. Watch the score move.</div>
+      </div>
+    </div>
+
+    <div class="dashboard-section-title">Session status</div>
+    <div class="meta-grid">
+      <div class="meta-card">
+        <div class="meta-label">Overall score</div>
+        <div class="meta-value" id="scorePercent">0%</div>
+        <div class="progress-bar-shell">
+          <div class="progress-bar-fill" id="scoreBar"></div>
+        </div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Items completed</div>
+        <div class="meta-value">
+          <span id="completedCount">0</span>/<span id="totalCount">0</span>
+        </div>
+        <div class="progress-bar-shell">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-section-title">Breakdown</div>
+    <div class="score-row">
+      <div>
+        <div class="score-main" id="rawScore">0 / 0</div>
+        <div class="score-sub" id="scoreSub">0 correct • 0 incorrect</div>
+      </div>
+    </div>
+
+    <div class="score-badges">
+      <span class="score-badge" id="conventionsBadge">Conventions: 0/0</span>
+      <span class="score-badge" id="revisionBadge">Revision: 0/0</span>
+      <span class="score-badge" id="organizationBadge">Org & Clarity: 0/0</span>
+    </div>
+
+    <div class="dashboard-section-title">Focus for this set</div>
+    <div class="pill-row">
+      <span class="pill">Editing underlined text</span>
+      <span class="pill">Grammar & usage</span>
+      <span class="pill">Capitalization & punctuation</span>
+      <span class="pill">Evidence & multi-select</span>
+    </div>
+
+    <div class="dashboard-section-title">How this works</div>
+    <div class="mini-list">
+      <p class="tag-lit"><strong>Single choice:</strong> One correct answer. Choose the best fix.</p>
+      <p class="tag-info"><strong>Multiple select:</strong> The prompt tells you. All correct options must be chosen to earn credit.</p>
+      <p><strong>Feedback:</strong> Every miss tells you why it’s wrong and what the correct choice is doing.</p>
+    </div>
+
+    <div class="control-row">
+      <button class="btn btn-ghost" id="restartBtn">Restart set</button>
+      <button class="btn btn-primary" id="summaryBtn">View summary</button>
+    </div>
+  </aside>
+
+  <!-- RIGHT PANEL -->
+  <main class="panel main-panel">
+
+    <section class="passage-card">
+      <div class="passage-label" id="passageLabel">Prompt • Editing Passage</div>
+      <h2 class="passage-title" id="passageTitle">Loading…</h2>
+      <div class="passage-body" id="passageBody"></div>
+    </section>
+
+    <section class="question-card">
+      <div class="question-header-row">
+        <div class="question-index" id="questionIndex">Question 1</div>
+        <div class="question-standard" id="questionStandard">Standard: —</div>
+      </div>
+
+      <div class="question-text" id="questionText">Loading question…</div>
+      <div class="question-extra" id="questionExtra"></div>
+
+      <div class="options-grid" id="optionsGrid"></div>
+
+      <div class="feedback-row">
+        <div class="feedback-icon correct hidden" id="feedbackIconCorrect">✓</div>
+        <div class="feedback-icon incorrect hidden" id="feedbackIconIncorrect">!</div>
+        <div class="feedback-text" id="feedbackText"></div>
+      </div>
+
+      <div class="explanation" id="explanationBox"></div>
+
+      <div class="nav-row">
+        <div class="nav-left">
+          <span id="navProgress">1 / 1</span> •
+          <span id="navType">Editing</span>
+        </div>
+        <div class="nav-right">
+          <span class="pill-mini" id="navTag">Subpart 4</span>
+          <button class="btn btn-ghost" id="submitMultiBtn" disabled>Submit answer</button>
+          <button class="btn btn-primary" id="nextBtn" disabled>
+            Next <span id="nextLabelArrow">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- SUMMARY MODAL -->
+<div class="modal-backdrop" id="summaryModal" data-open="false">
+  <div class="modal">
+    <h2>Session summary</h2>
+    <p id="summaryHeadline">You’ve completed this Subpart 4 practice set.</p>
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Score</div>
+        <div class="summary-value" id="summaryScore">0%</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Correct</div>
+        <div class="summary-value" id="summaryCorrect">0</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Time</div>
+        <div class="summary-value" id="summaryTime">00:00</div>
+      </div>
+    </div>
+
+    <div class="mini-list summary-mini">
+      <p id="summaryConventions">Conventions: 0/0 correct</p>
+      <p id="summaryRevision">Revision: 0/0 correct</p>
+      <p id="summaryOrganization">Organization & Clarity: 0/0 correct</p>
+      <p><strong>Next move:</strong> Target the lowest strand first. Run again and watch the bars move.</p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="closeSummaryBtn">Close</button>
+      <button class="btn btn-primary" id="restartFromSummaryBtn">Restart set</button>
+    </div>
+  </div>
+</div>
+
+<!-- BEGIN SCRIPT SECTION -->
+<script> <script>
+  ************************************************************
+ * PASSAGES — FULL DATA
+ ************************************************************/
+const passages = [
+  {
+    id: "P1",
+    label: "Editing Passage • Narrative",
+    title: "The Surprise Class Visitor",
+    body: [
+      "Last Friday, our teacher told us we _was having_ a surprise visitor. Everyone started guessing who it might be.",
+      "Some students thought it would be a firefighter, and others _thinks_ it might be a famous author.",
+      "When the door finally opened, a woman in a bright blue jacket walked in. She smiled and said, “Good morning, I’m Dr. Lopez, a scientist who studies oceans.”",
+      "Our teacher _have been planning_ this visit for weeks, but she kept it a secret.",
+      "Dr. Lopez showed us pictures of coral reefs and explained how pollution _are hurting_ sea animals.",
+      "By the end of her visit, we all agreed that protecting the ocean _is very important job_."
+    ]
+  },
+
+  {
+    id: "P2",
+    label: "Editing Passage • Informational",
+    title: "How Compost Helps Gardens",
+    body: [
+      "Compost is a mixture of old food scraps and yard waste that _break down_ over time.",
+      "Instead of throwing away banana peels and leaves, people can put them in a compost bin.",
+      "Tiny organisms, like bacteria and worms, help turn the scraps into rich soil. This soil is called compost, and it _provide_ plants with nutrients.",
+      "Gardeners like compost because it keeps soil moist, and it can reduce the amount of trash that goes to landfills.",
+      "Using compost is one way people can _helping_ the environment."
+    ]
+  },
+
+  {
+    id: "P3",
+    label: "Editing Passage • Opinion",
+    title: "Why School Libraries Matter",
+    body: [
+      "Some students think the school library is just a quiet place, but I believe it is the heart of our school.",
+      "The library gives us a space where we can _discover new ideas and learning about_ different cultures.",
+      "When students check out books, they practice choosing what interests them.",
+      "The librarian also helps us find sources for projects, which _make_ our research stronger.",
+      "For these reasons, I think every school _should have more longer_ library time each week."
+    ]
+  }
+];
+  /************************************************************
+ * QUESTIONS — FULL TCAP SUBPART 4 SET (15 ITEMS)
+ ************************************************************/
+const questions = [
+
+  /* ————————————————
+     PASSAGE 1 — Narrative
+  ———————————————— */
+
+  {
+    id: 1,
+    passageId: "P1",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Verb tense",
+    text: "Which correction is needed for the underlined phrase _was having_ in the first sentence?",
+    options: [
+      { text: "were having", correct: true,  why: "Plural subject 'we' requires 'were'." },
+      { text: "was had", correct: false,     why: "Incorrect tense and meaning." },
+      { text: "are having", correct: false,  why: "Changes the tense to present." },
+      { text: "No change", correct: false,   why: "'We was' is not correct usage." }
+    ],
+    explanation: "The plural subject 'we' needs the verb 'were having.'"
+  },
+
+  {
+    id: 2,
+    passageId: "P1",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Subject‑verb agreement",
+    text: "Which correction is needed for the underlined word _thinks_ in the second sentence?",
+    options: [
+      { text: "think", correct: true,  why: "Plural subject 'others' requires 'think'." },
+      { text: "thinking", correct: false, why: "Incorrect form for this sentence." },
+      { text: "has thought", correct: false, why: "Incorrect tense and meaning." },
+      { text: "No change", correct: false, why: "'Others thinks' is incorrect." }
+    ],
+    explanation: "Plural subjects like 'others' use the base verb 'think.'"
+  },
+
+  {
+    id: 3,
+    passageId: "P1",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Verb tense",
+    text: "Which correction is needed for the underlined phrase _have been planning_?",
+    extra: "Our teacher _have been planning_ this visit for weeks, but she kept it a secret.",
+    options: [
+      { text: "has been planning", correct: true, why: "Singular subject 'teacher' requires 'has'." },
+      { text: "had been planning", correct: false, why: "Changes the time relationship." },
+      { text: "have planned", correct: false, why: "Incorrect aspect for this context." },
+      { text: "No change", correct: false, why: "'Teacher have' is incorrect." }
+    ],
+    explanation: "The singular subject 'teacher' needs 'has been planning.'"
+  },
+
+  {
+    id: 4,
+    passageId: "P1",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Verb tense",
+    text: "Which correction is needed for the underlined phrase _are hurting_?",
+    extra: "Pollution _are hurting_ sea animals.",
+    options: [
+      { text: "is hurting", correct: true, why: "Singular subject 'pollution' requires 'is'." },
+      { text: "were hurting", correct: false, why: "Incorrect tense shift." },
+      { text: "be hurting", correct: false, why: "Not a standard construction." },
+      { text: "No change", correct: false, why: "'Pollution are' is incorrect." }
+    ],
+    explanation: "The singular noun 'pollution' needs 'is hurting.'"
+  },
+
+  {
+    id: 5,
+    passageId: "P1",
+    type: "single",
+    skill: "revision",
+    standard: "W.5.2d — Precise language",
+    text: "Which revision best improves the phrase _is very important job_?",
+    options: [
+      { text: "is a very important job", correct: true, why: "Adds the needed article 'a'." },
+      { text: "is very important jobs", correct: false, why: "Plural 'jobs' does not fit." },
+      { text: "is very importantly job", correct: false, why: "Incorrect adverb usage." },
+      { text: "No change", correct: false, why: "Missing article 'a'." }
+    ],
+    explanation: "The article 'a' is required for correct grammar."
+  },
+
+  {
+    id: 6,
+    passageId: "P1",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.2 — Commas in dialogue",
+    text: "Which sentence uses commas and quotation marks correctly?",
+    options: [
+      { text: "“Good morning I’m Dr. Lopez” she said.", correct: false, why: "Missing comma after 'morning'." },
+      { text: "“Good morning, I’m Dr. Lopez,” she said.", correct: true, why: "Correct comma placement inside quotes." },
+      { text: "“Good morning, I’m Dr. Lopez”, she said.", correct: false, why: "Comma must be inside the quotation marks." },
+      { text: "“Good morning.” I’m Dr. Lopez she said.", correct: false, why: "Incorrect punctuation and capitalization." }
+    ],
+    explanation: "Dialogue requires the comma inside the quotation marks."
+  },
+
+  /* ————————————————
+     PASSAGE 2 — Informational
+  ———————————————— */
+
+  {
+    id: 7,
+    passageId: "P2",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Verb tense",
+    text: "Which correction is needed for the underlined phrase _break down_?",
+    options: [
+      { text: "breaks down", correct: true, why: "Singular subject 'mixture' requires 'breaks'." },
+      { text: "breaking down", correct: false, why: "Incorrect tense for this sentence." },
+      { text: "have broken down", correct: false, why: "Incorrect aspect." },
+      { text: "No change", correct: false, why: "'Mixture break' is incorrect." }
+    ],
+    explanation: "The singular subject 'mixture' needs 'breaks down.'"
+  },
+
+  {
+    id: 8,
+    passageId: "P2",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Subject‑verb agreement",
+    text: "Which correction is needed for the underlined word _provide_?",
+    options: [
+      { text: "provides", correct: true, why: "Singular subject 'compost' requires 'provides'." },
+      { text: "provided", correct: false, why: "Incorrect tense." },
+      { text: "is providing", correct: false, why: "Incorrect aspect." },
+      { text: "No change", correct: false, why: "'Compost provide' is incorrect." }
+    ],
+    explanation: "The singular noun 'compost' needs 'provides.'"
+  },
+
+  {
+    id: 9,
+    passageId: "P2",
+    type: "single",
+    skill: "revision",
+    standard: "W.5.2d — Clarity",
+    text: "Which revision best improves the phrase _helping the environment_?",
+    options: [
+      { text: "help protect the environment", correct: true, why: "More precise and formal." },
+      { text: "helping out the environment", correct: false, why: "Informal and unclear." },
+      { text: "help the environment lots", correct: false, why: "Too informal for informational text." },
+      { text: "No change", correct: false, why: "Original is vague." }
+    ],
+    explanation: "Informational writing benefits from precise, formal language."
+  },
+
+  {
+    id: 10,
+    passageId: "P2",
+    type: "single",
+    skill: "organization",
+    standard: "W.5.2 — Logical order",
+    text: "Where would the sentence 'Compost also reduces the need for chemical fertilizers.' best fit?",
+    options: [
+      { text: "After the sentence about nutrients", correct: true, why: "It logically extends the idea of soil improvement." },
+      { text: "At the very beginning", correct: false, why: "Too specific for an introduction." },
+      { text: "After the sentence about landfills", correct: false, why: "Does not connect to waste reduction." },
+      { text: "At the end of the passage", correct: false, why: "Interrupts the conclusion." }
+    ],
+    explanation: "It fits best after discussing how compost enriches soil."
+  },
+
+  /* ————————————————
+     PASSAGE 3 — Opinion
+  ———————————————— */
+
+  {
+    id: 11,
+    passageId: "P3",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Verb tense",
+    text: "Which correction is needed for the underlined phrase _discover new ideas and learning about_?",
+    options: [
+      { text: "discover new ideas and learn about", correct: true, why: "Parallel structure requires matching verb forms." },
+      { text: "discovering new ideas and learning about", correct: false, why: "Does not match the sentence structure." },
+      { text: "discover new ideas and learned about", correct: false, why: "Incorrect tense shift." },
+      { text: "No change", correct: false, why: "Not parallel structure." }
+    ],
+    explanation: "Parallel verbs must match: 'discover' and 'learn.'"
+  },
+
+  {
+    id: 12,
+    passageId: "P3",
+    type: "single",
+    skill: "conventions",
+    standard: "L.5.1 — Subject‑verb agreement",
+    text: "Which correction is needed for the underlined word _make_?",
+    options: [
+      { text: "makes", correct: true, why: "Singular subject 'librarian' requires 'makes'." },
+      { text: "making", correct: false, why: "Incorrect form." },
+      { text: "made", correct: false, why: "Incorrect tense." },
+      { text: "No change", correct: false, why: "'Librarian make' is incorrect." }
+    ],
+    explanation: "The singular subject 'librarian' needs 'makes.'"
+  },
+
+  {
+    id: 13,
+    passageId: "P3",
+    type: "single",
+    skill: "revision",
+    standard: "W.5.2d — Word choice",
+    text: "Which revision best improves the phrase _should have more longer_?",
+    options: [
+      { text: "should have longer", correct: true, why: "Removes the double comparative." },
+      { text: "should have more long", correct: false, why: "Incorrect adjective form." },
+      { text: "should have the most longer", correct: false, why: "Incorrect comparative structure." },
+      { text: "No change", correct: false, why: "Double comparative is incorrect." }
+    ],
+    explanation: "Only one comparative form is needed: 'longer.'"
+  },
+
+  {
+    id: 14,
+    passageId: "P3",
+    type: "multi",
+    skill: "revision",
+    standard: "W.5.2 — Evidence",
+    text: "Which TWO sentences best support the opinion that the library is the heart of the school?",
+    options: [
+      { text: "The library gives us a space to discover new ideas.", correct: true, why: "Supports the central idea." },
+      { text: "The librarian helps us find sources for projects.", correct: true, why: "Shows the library's importance." },
+      { text: "Some students think the library is quiet.", correct: false, why: "Does not support the opinion." },
+      { text: "Students check out books.", correct: false, why: "Too general; not strong evidence." }
+    ],
+    explanation: "Strong evidence directly supports the opinion stated."
+  },
+
+  {
+    id: 15,
+    passageId: "P3",
+    type: "single",
+    skill: "organization",
+    standard: "W.5.2 — Conclusion",
+    text: "Which sentence best strengthens the conclusion of the passage?",
+    options: [
+      { text: "The library helps every student grow as a learner.", correct: true, why: "Strong concluding idea." },
+      { text: "The library has many shelves.", correct: false, why: "Not relevant to the opinion." },
+      { text: "Some students read during lunch.", correct: false, why: "Too specific and unrelated." },
+      { text: "Books are important.", correct: false, why: "Too vague." }
+    ],
+    explanation: "A strong conclusion reinforces the main opinion."
+  }
+
+];
+  /************************************************************
+ * ENGINE STATE
+ ************************************************************/
+let currentIndex = 0;
+let selectedOptions = new Set();
+let isMulti = false;
+let score = 0;
+let correctCount = 0;
+let incorrectCount = 0;
+
+let strandTotals = {
+  conventions: { correct: 0, total: 0 },
+  revision: { correct: 0, total: 0 },
+  organization: { correct: 0, total: 0 }
+};
+
+let timerSeconds = 0;
+let timerInterval = null;
+let timerPaused = false;
+
+/************************************************************
+ * TIMER
+ ************************************************************/
+function startTimer() {
+  timerInterval = setInterval(() => {
+    if (!timerPaused) {
+      timerSeconds++;
+      updateTimerDisplay();
+    }
+  }, 1000);
 }
 
-.score-main {
-  font-size: 1.4rem;
-  color: var(--lilac-soft);
-  font-variant-numeric: tabular-nums;
+function updateTimerDisplay() {
+  const m = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
+  const s = String(timerSeconds % 60).padStart(2, "0");
+  document.getElementById("timerValue").textContent = `${m}:${s}`;
+
+  const timerBox = document.getElementById("timer");
+  if (timerSeconds < 60) timerBox.dataset.state = "ok";
+  else if (timerSeconds < 120) timerBox.dataset.state = "warning";
+  else timerBox.dataset.state = "danger";
 }
 
-.score-sub {
-  font-size: 0.8rem;
-  color: rgba(244,239,255,0.8);
+document.getElementById("pauseBtn").onclick = () => {
+  timerPaused = true;
+  document.getElementById("pauseBtn").disabled = true;
+  document.getElementById("resumeBtn").disabled = false;
+};
+
+document.getElementById("resumeBtn").onclick = () => {
+  timerPaused = false;
+  document.getElementById("resumeBtn").disabled = true;
+  document.getElementById("pauseBtn").disabled = false;
+};
+
+/************************************************************
+ * INITIALIZE
+ ************************************************************/
+function init() {
+  document.getElementById("totalCount").textContent = questions.length;
+
+  // Count strand totals
+  questions.forEach(q => {
+    strandTotals[q.skill].total++;
+  });
+
+  loadQuestion();
+  startTimer();
 }
 
-.score-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
+window.onload = init;
+
+/************************************************************
+ * LOAD QUESTION + PASSAGE
+ ************************************************************/
+function loadQuestion() {
+  const q = questions[currentIndex];
+  const passage = passages.find(p => p.id === q.passageId);
+
+  // Passage
+  document.getElementById("passageLabel").textContent = passage.label;
+  document.getElementById("passageTitle").textContent = passage.title;
+  document.getElementById("passageBody").innerHTML = passage.body
+    .map(line => `<p>${line}</p>`)
+    .join("");
+
+  // Question
+  document.getElementById("questionIndex").textContent = `Question ${currentIndex + 1}`;
+  document.getElementById("questionStandard").textContent = `Standard: ${q.standard}`;
+  document.getElementById("questionText").textContent = q.text;
+  document.getElementById("questionExtra").textContent = q.extra || "";
+
+  // Reset UI
+  selectedOptions.clear();
+  isMulti = q.type === "multi";
+  document.getElementById("submitMultiBtn").disabled = !isMulti;
+  document.getElementById("submitMultiBtn").style.display = isMulti ? "inline-flex" : "none";
+  document.getElementById("nextBtn").disabled = true;
+
+  hideFeedback();
+
+  // Render options
+  renderOptions(q);
+
+  // Update nav
+  document.getElementById("navProgress").textContent = `${currentIndex + 1} / ${questions.length}`;
+  document.getElementById("navType").textContent = q.type === "multi" ? "Multiple Select" : "Editing";
 }
 
-.score-badge {
-  font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: rgba(8,4,20,0.9);
-  border: 1px solid rgba(244,239,255,0.16);
-  color: rgba(244,239,255,0.9);
+/************************************************************
+ * RENDER OPTIONS
+ ************************************************************/
+function renderOptions(q) {
+  const grid = document.getElementById("optionsGrid");
+  grid.innerHTML = "";
+
+  // Randomize order
+  const shuffled = [...q.options].sort(() => Math.random() - 0.5);
+
+  shuffled.forEach((opt, idx) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.dataset.index = idx;
+
+    btn.innerHTML = `
+      <div class="option-key">${String.fromCharCode(65 + idx)}</div>
+      <div>${opt.text}</div>
+    `;
+
+    btn.onclick = () => handleOptionClick(q, shuffled, idx, btn);
+    grid.appendChild(btn);
+  });
 }
 
-.pill-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 6px;
+/************************************************************
+ * OPTION CLICK HANDLER
+ ************************************************************/
+function handleOptionClick(q, opts, idx, btn) {
+  if (q.type === "single") {
+    // Clear all
+    document.querySelectorAll(".option-btn").forEach(b => b.dataset.state = "");
+    btn.dataset.state = "selected";
+    selectedOptions = new Set([idx]);
+    checkSingle(q, opts);
+  } else {
+    // Multi-select
+    if (selectedOptions.has(idx)) {
+      selectedOptions.delete(idx);
+      btn.dataset.state = "";
+    } else {
+      selectedOptions.add(idx);
+      btn.dataset.state = "selected";
+    }
+    document.getElementById("submitMultiBtn").disabled = selectedOptions.size === 0;
+  }
 }
 
-.pill {
-  font-size: 0.7rem;
-  padding: 3px 8px;
-  border-radius: 999px;
-  border: 1px solid rgba(244,239,255,0.2);
-  color: rgba(244,239,255,0.9);
-  background: rgba(8,4,20,0.7);
+/************************************************************
+ * SINGLE SELECT CHECK
+ ************************************************************/
+function checkSingle(q, opts) {
+  const idx = [...selectedOptions][0];
+  const chosen = opts[idx];
+
+  if (chosen.correct) {
+    correctCount++;
+    strandTotals[q.skill].correct++;
+    showFeedback(true, chosen.why, q.explanation);
+  } else {
+    incorrectCount++;
+    showFeedback(false, chosen.why, q.explanation);
+  }
+
+  lockOptions(q, opts);
+  updateScore();
+  document.getElementById("nextBtn").disabled = false;
 }
 
-.mini-list {
-  margin-top: 6px;
-  font-size: 0.75rem;
-  color: rgba(244,239,255,0.9);
+/************************************************************
+ * MULTI SELECT SUBMIT
+ ************************************************************/
+document.getElementById("submitMultiBtn").onclick = () => {
+  const q = questions[currentIndex];
+  const opts = [...document.querySelectorAll(".option-btn")].map((btn, i) => q.options[i]);
+
+  const correctSet = new Set(q.options.map((o, i) => o.correct ? i : null).filter(i => i !== null));
+
+  const isCorrect = setsEqual(correctSet, selectedOptions);
+
+  if (isCorrect) {
+    correctCount++;
+    strandTotals[q.skill].correct++;
+    showFeedback(true, "All correct options selected.", q.explanation);
+  } else {
+    incorrectCount++;
+    showFeedback(false, "Your selection does not match all correct answers.", q.explanation);
+  }
+
+  lockOptions(q, q.options);
+  updateScore();
+  document.getElementById("nextBtn").disabled = false;
+};
+
+function setsEqual(a, b) {
+  return a.size === b.size && [...a].every(x => b.has(x));
 }
 
-.mini-list p {
-  margin: 2px 0;
+/************************************************************
+ * LOCK OPTIONS
+ ************************************************************/
+function lockOptions(q, opts) {
+  const buttons = document.querySelectorAll(".option-btn");
+  buttons.forEach((btn, idx) => {
+    const opt = opts[idx];
+    if (opt.correct) btn.dataset.state = "correct";
+    else if (selectedOptions.has(idx)) btn.dataset.state = "incorrect";
+    btn.disabled = true;
+  });
 }
 
-.tag-lit {
-  border-left: 3px solid #ffb86c;
-  padding-left: 6px;
+/************************************************************
+ * FEEDBACK
+ ************************************************************/
+function showFeedback(isCorrect, why, explanation) {
+  const iconC = document.getElementById("feedbackIconCorrect");
+  const iconI = document.getElementById("feedbackIconIncorrect");
+  const text = document.getElementById("feedbackText");
+  const exp = document.getElementById("explanationBox");
+
+  iconC.classList.add("hidden");
+  iconI.classList.add("hidden");
+
+  if (isCorrect) iconC.classList.remove("hidden");
+  else iconI.classList.remove("hidden");
+
+  text.textContent = why;
+  exp.textContent = explanation;
+  exp.dataset.visible = "true";
 }
 
-.tag-info {
-  border-left: 3px solid #2eaf7d;
-  padding-left: 6px;
+function hideFeedback() {
+  document.getElementById("feedbackIconCorrect").classList.add("hidden");
+  document.getElementById("feedbackIconIncorrect").classList.add("hidden");
+  document.getElementById("feedbackText").textContent = "";
+  document.getElementById("explanationBox").dataset.visible = "false";
 }
 
-.control-row {
-  margin-top: 10px;
-  display: flex;
-  gap: 8px;
+/************************************************************
+ * SCORE + PROGRESS
+ ************************************************************/
+function updateScore() {
+  const total = questions.length;
+  score = Math.round((correctCount / total) * 100);
+
+  document.getElementById("scorePercent").textContent = `${score}%`;
+  document.getElementById("rawScore").textContent = `${correctCount} / ${total}`;
+  document.getElementById("scoreSub").textContent = `${correctCount} correct • ${incorrectCount} incorrect`;
+
+  document.getElementById("scoreBar").style.width = `${score}%`;
+  document.getElementById("progressBar").style.width = `${((currentIndex + 1) / total) * 100}%`;
+
+  document.getElementById("completedCount").textContent = currentIndex + 1;
+
+  // Strand badges
+  document.getElementById("conventionsBadge").textContent =
+    `Conventions: ${strandTotals.conventions.correct}/${strandTotals.conventions.total}`;
+  document.getElementById("revisionBadge").textContent =
+    `Revision: ${strandTotals.revision.correct}/${strandTotals.revision.total}`;
+  document.getElementById("organizationBadge").textContent =
+    `Org & Clarity: ${strandTotals.organization.correct}/${strandTotals.organization.total}`;
 }
 
-/* Timer */
+/************************************************************
+ * NEXT QUESTION
+ ************************************************************/
+document.getElementById("nextBtn").onclick = () => {
+  currentIndex++;
+  if (currentIndex >= questions.length) {
+    showSummary();
+    return;
+  }
+  loadQuestion();
+};
 
-.timer-floating {
-  position: fixed;
-  top: 14px;
-  right: 16px;
-  z-index: 50;
-  background: rgba(8,4,20,0.92);
-  border-radius: 999px;
-  padding: 6px 12px;
-  border: 1px solid rgba(179,140,255,0.7);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  color: var(--lilac-soft);
+/************************************************************
+ * SUMMARY MODAL
+ ************************************************************/
+function showSummary() {
+  clearInterval(timerInterval);
+
+  document.getElementById("summaryScore").textContent = `${score}%`;
+  document.getElementById("summaryCorrect").textContent = correctCount;
+
+  const m = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
+  const s = String(timerSeconds % 60).padStart(2, "0");
+  document.getElementById("summaryTime").textContent = `${m}:${s}`;
+
+  document.getElementById("summaryConventions").textContent =
+    `Conventions: ${strandTotals.conventions.correct}/${strandTotals.conventions.total} correct`;
+  document.getElementById("summaryRevision").textContent =
+    `Revision: ${strandTotals.revision.correct}/${strandTotals.revision.total} correct`;
+  document.getElementById("summaryOrganization").textContent =
+    `Organization & Clarity: ${strandTotals.organization.correct}/${strandTotals.organization.total} correct`;
+
+  document.getElementById("summaryModal").dataset.open = "true";
 }
 
-.timer-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent-green);
-  box-shadow: 0 0 10px rgba(46,175,125,0.9);
-}
+document.getElementById("closeSummaryBtn").onclick = () => {
+  document.getElementById("summaryModal").dataset.open = "false";
+};
 
-.timer-floating[data-state="warning"] .timer-dot {
-  background: #ffb86c;
-  box-shadow: 0 0 10px rgba(255,184,108,0.9);
-}
+document.getElementById("restartFromSummaryBtn").onclick =
+document.getElementById("restartBtn").onclick = () => {
+  location.reload();
+};
+  /************************************************************
+ * END OF SCRIPT
+ ************************************************************/
+</script>
 
-.timer-floating[data-state="danger"] .timer-dot {
-  background: var(--accent-red);
-  box-shadow: 0 0 10px rgba(224,82,111,0.9);
-}
-
-.timer-label {
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.65rem;
-  opacity: 0.8;
-}
-
-.timer-value {
-  font-variant-numeric: tabular-nums;
-  font-weight: 600;
-}
-
-.timer-controls {
-  display: flex;
-  gap: 4px;
-  margin-left: 6px;
-}
-
-.timer-btn {
-  border-radius: 999px;
-  border: 1px solid rgba(244,239,255,0.4);
-  background: transparent;
-  color: var(--lilac-soft);
-  font-size: 0.65rem;
-  padding: 2px 6px;
-  cursor: pointer;
-}
-
-.timer-btn:hover:not(:disabled) {
-  background: rgba(244,239,255,0.08);
-}
-
-/* Passage */
-
-.passage-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 14px 16px;
-  border: 1px solid rgba(0,0,0,0.08);
-  max-height: 260px;
-  overflow: auto;
-}
-
-.passage-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #7a5ad9;
-  margin-bottom: 2px;
-}
-
-.passage-title {
-  margin: 0 0 6px;
-  font-size: 1rem;
-  color: #1b1335;
-}
-
-.passage-body p {
-  margin: 4px 0;
-  font-size: 0.86rem;
-  color: #222222;
-}
-
-/* Question */
-
-.question-card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 14px 16px 16px;
-  border: 1px solid rgba(0,0,0,0.08);
-}
-
-.question-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-
-.question-index {
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #7a5ad9;
-}
-
-.question-standard {
-  font-size: 0.7rem;
-  color: #555;
-}
-
-.question-text {
-  font-size: 0.95rem;
-  color: #000000;
-  margin-bottom: 6px;
-}
-
-.question-extra {
-  font-size: 0.8rem;
-  color: #444;
-  margin-bottom: 8px;
-  font-style: italic;
-}
-
-/* Options */
-
-.options-grid {
-  display: grid;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.option-btn {
-  border-radius: 999px;
-  border: 1px solid rgba(0,0,0,0.12);
-  padding: 8px 10px;
-  font-size: 0.9rem;
-  background: #ffffff;
-  color: #000000;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all 0.16s ease-out;
-  text-align: left;
-}
-
-.option-btn:hover:not(:disabled) {
-  border-color: var(--lilac-main);
-  box-shadow: 0 0 0 1px rgba(179,140,255,0.4);
-  transform: translateY(-1px);
-}
-
-.option-btn[data-state="selected"] {
-  background: #e6ddff;
-  border-color: var(--lilac-dark);
-  box-shadow: 0 0 0 1px rgba(122,90,217,0.7);
-}
-
-.option-btn[data-state="correct"] {
-  background: #e0f7ef;
-  border-color: var(--accent-green);
-  box-shadow: 0 0 0 1px rgba(46,175,125,0.7);
-}
-
-.option-btn[data-state="incorrect"] {
-  background: #ffe6ee;
-  border-color: var(--accent-red);
-  box-shadow: 0 0 0 1px rgba(224,82,111,0.7);
-}
-
-.option-key {
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-/* Feedback */
-
-.feedback-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 0.85rem;
-  margin-bottom: 6px;
-  min-height: 24px;
-}
-
-.feedback-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  color: #ffffff;
-  flex-shrink: 0;
-}
-
-.feedback-icon.correct {
-  background: var(--accent-green);
-}
-
-.feedback-icon.incorrect {
-  background: var(--accent-red);
-}
-
-.feedback-text {
-  color: #222;
-}
-
-.feedback-text strong {
-  font-weight: 600;
-}
-
-.explanation {
-  font-size: 0.8rem;
-  color: #444;
-  background: #f7f3ff;
-  border-radius: 10px;
-  padding: 6px 8px;
-  border: 1px dashed rgba(122,90,217,0.5);
-  display: none;
-}
-
-.explanation[data-visible="true"] {
-  display: block;
-}
-
-/* Nav row */
-
-.nav-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  gap: 10px;
-}
-
-.nav-left {
-  font-size: 0.8rem;
-  color: #333;
-}
-
-.nav-left span {
-  font-variant-numeric: tabular-nums;
-}
-
-.nav-right {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.pill-mini {
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(122,90,217,0.1);
-  color: #7a5ad9;
-  border: 1px solid rgba(122,90,217,0.4);
-}
-
-/* Buttons */
-
-.btn {
-  border-radius: 999px;
-  border: none;
-  padding: 7px 14px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-weight: 500;
-  transition: all 0.16s ease-out;
-  white-space: nowrap;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--lilac-main), var(--lilac-dark));
-  color: #ffffff;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-}
-
-.btn-primary:disabled {
-  opacity: 0.4;
-  cursor: default;
-  box-shadow: none;
-}
-
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 14px 26px rgba(0,0,0,0.6);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--lilac-soft);
-  border: 1px solid rgba(122,90
+</body>
+</html>
