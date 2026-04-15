@@ -1,15 +1,10 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <title>TN TCAP Grade 5 ELA – Subpart 4 Practice (Light Theme)</title>
 
 <style>
-
-/* ————————————————————————————————
-   LIGHT THEME — PREMIUM LILAC UI
-———————————————————————————————— */
-
 :root {
   --bg: #f7f4ff;
   --panel-bg: #ffffff;
@@ -22,9 +17,7 @@
   --accent-red: #e0526f;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -37,8 +30,6 @@ body {
   align-items: stretch;
 }
 
-/* Layout */
-
 .app-shell {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -48,12 +39,8 @@ body {
 }
 
 @media (max-width: 900px) {
-  .app-shell {
-    grid-template-columns: 1fr;
-  }
+  .app-shell { grid-template-columns: 1fr; }
 }
-
-/* Panels */
 
 .panel {
   background: var(--panel-bg);
@@ -63,7 +50,12 @@ body {
   padding: 20px;
 }
 
-/* Header */
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
 
 .panel-header h1 {
   margin: 0;
@@ -72,12 +64,13 @@ body {
 }
 
 .panel-header p {
-  margin: 4px 0 0;
+  margin: 0;
   font-size: 0.85rem;
   color: var(--text-mid);
 }
 
 .chip {
+  align-self: flex-start;
   background: var(--lilac-soft);
   color: white;
   padding: 4px 10px;
@@ -85,8 +78,6 @@ body {
   font-size: 0.7rem;
   text-transform: uppercase;
 }
-
-/* Avatar */
 
 .avatar-row {
   display: flex;
@@ -108,11 +99,7 @@ body {
   color: var(--text-mid);
 }
 
-.avatar-text strong {
-  color: var(--lilac-main);
-}
-
-/* Dashboard */
+.avatar-text strong { color: var(--lilac-main); }
 
 .dashboard-section-title {
   font-size: 0.75rem;
@@ -162,8 +149,6 @@ body {
   transition: width 0.25s ease-out;
 }
 
-/* Score badges */
-
 .score-badges {
   display: flex;
   flex-wrap: wrap;
@@ -180,8 +165,6 @@ body {
   color: var(--lilac-main);
 }
 
-/* Pills */
-
 .pill-row {
   display: flex;
   flex-wrap: wrap;
@@ -197,9 +180,26 @@ body {
   color: var(--text-mid);
 }
 
-/* Passage */
+.mini-list p {
+  margin: 4px 0;
+  font-size: 0.8rem;
+  color: var(--text-mid);
+}
 
-.passage-card {
+.control-row {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.main-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.passage-card, .question-card {
   background: white;
   border: 1px solid var(--panel-border);
   border-radius: 14px;
@@ -224,15 +224,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* Question */
-
-.question-card {
-  background: white;
-  border: 1px solid var(--panel-border);
-  border-radius: 14px;
-  padding: 16px;
-}
-
 .question-text {
   font-size: 1rem;
   color: var(--text-dark);
@@ -246,11 +237,10 @@ body {
   font-style: italic;
 }
 
-/* Options */
-
 .options-grid {
   display: grid;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .option-btn {
@@ -264,9 +254,7 @@ body {
   transition: 0.15s;
 }
 
-.option-btn:hover {
-  border-color: var(--lilac-main);
-}
+.option-btn:hover { border-color: var(--lilac-main); }
 
 .option-btn[data-state="selected"] {
   background: #e9e2ff;
@@ -283,7 +271,24 @@ body {
   border-color: var(--accent-red);
 }
 
-/* Buttons */
+.feedback-row {
+  min-height: 20px;
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  margin-bottom: 6px;
+}
+
+.explanation {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  margin-bottom: 10px;
+}
+
+.nav-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
 
 .btn {
   padding: 8px 14px;
@@ -298,17 +303,13 @@ body {
   color: white;
 }
 
-.btn-primary:disabled {
-  opacity: 0.4;
-}
+.btn-primary:disabled { opacity: 0.4; cursor: default; }
 
 .btn-ghost {
   background: white;
   border: 1px solid var(--panel-border);
   color: var(--lilac-main);
 }
-
-/* Modal */
 
 .modal-backdrop {
   position: fixed;
@@ -319,9 +320,7 @@ body {
   justify-content: center;
 }
 
-.modal-backdrop[data-open="true"] {
-  display: flex;
-}
+.modal-backdrop[data-open="true"] { display: flex; }
 
 .modal {
   background: white;
@@ -332,6 +331,37 @@ body {
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.summary-card {
+  background: #faf8ff;
+  border-radius: 10px;
+  padding: 8px;
+  text-align: center;
+}
+
+.summary-label {
+  font-size: 0.7rem;
+  color: var(--text-mid);
+}
+
+.summary-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--lilac-main);
+}
+
+.modal-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
 </style>
 </head>
 <body>
@@ -393,8 +423,8 @@ body {
     <div class="dashboard-section-title">How this works</div>
     <div class="mini-list">
       <p><strong>Single choice:</strong> One correct answer. Choose the best fix.</p>
-      <p><strong>Multiple select:</strong> The prompt tells you. All correct options must be chosen.</p>
-      <p><strong>Feedback:</strong> Every miss tells you why it’s wrong and what the correct choice is doing.</p>
+      <p><strong>Multiple select:</strong> (Not in this mini-set.)</p>
+      <p><strong>Feedback:</strong> See if you’re right, then read why.</p>
     </div>
 
     <div class="control-row">
@@ -419,13 +449,12 @@ body {
       <div class="options-grid" id="optionsGrid"></div>
 
       <div class="feedback-row">
-        <div class="feedback-text" id="feedbackText"></div>
+        <span id="feedbackText"></span>
       </div>
 
       <div class="explanation" id="explanationBox"></div>
 
       <div class="nav-row">
-        <button class="btn btn-ghost" id="submitMultiBtn" disabled>Submit answer</button>
         <button class="btn btn-primary" id="nextBtn" disabled>Next →</button>
       </div>
     </section>
@@ -469,10 +498,8 @@ body {
 </div>
 
 <script>
-<!-- BEGIN SCRIPT SECTION -->
-<script> <script>
-  ************************************************************
- * PASSAGES — FULL DATA
+/************************************************************
+ * DATA
  ************************************************************/
 const passages = [
   {
@@ -488,7 +515,6 @@ const passages = [
       "We all agreed that protecting the ocean _is very important job_."
     ]
   },
-
   {
     id: "P2",
     label: "Editing Passage • Informational",
@@ -501,7 +527,6 @@ const passages = [
       "Using compost is one way people can _helping_ the environment."
     ]
   },
-
   {
     id: "P3",
     label: "Editing Passage • Opinion",
@@ -514,9 +539,7 @@ const passages = [
     ]
   }
 ];
-  /************************************************************
- * QUESTIONS — FULL TCAP SUBPART 4 SET (15 ITEMS)
- ************************************************************/
+
 const questions = [
   {
     id: 1,
@@ -532,7 +555,6 @@ const questions = [
     ],
     explanation: "Plural subject 'we' requires 'were having.'"
   },
-
   {
     id: 2,
     passageId: "P1",
@@ -547,7 +569,6 @@ const questions = [
     ],
     explanation: "Plural subject 'others' requires 'think.'"
   },
-
   {
     id: 3,
     passageId: "P1",
@@ -562,7 +583,6 @@ const questions = [
     ],
     explanation: "Singular subject 'teacher' requires 'has been planning.'"
   },
-
   {
     id: 4,
     passageId: "P1",
@@ -577,7 +597,6 @@ const questions = [
     ],
     explanation: "Singular noun 'pollution' requires 'is hurting.'"
   },
-
   {
     id: 5,
     passageId: "P1",
@@ -593,14 +612,12 @@ const questions = [
     explanation: "The article 'a' is required."
   }
 ];
-  /************************************************************
- * ENGINE STATE
- ************************************************************/
+
 /************************************************************
- * ENGINE STATE
+ * STATE
  ************************************************************/
 let currentIndex = 0;
-let selectedOptions = new Set();
+let selectedIndex = null;
 let correctCount = 0;
 let incorrectCount = 0;
 
@@ -630,14 +647,13 @@ function updateTimerDisplay() {
 }
 
 /************************************************************
- * INITIALIZE
+ * INIT
  ************************************************************/
 function init() {
   document.getElementById("totalCount").textContent = questions.length;
 
-  // Count strand totals
   questions.forEach(q => {
-    strandTotals[q.skill].total++;
+    if (strandTotals[q.skill]) strandTotals[q.skill].total++;
   });
 
   loadQuestion();
@@ -653,21 +669,17 @@ function loadQuestion() {
   const q = questions[currentIndex];
   const passage = passages.find(p => p.id === q.passageId);
 
-  // Passage
   document.getElementById("passageLabel").textContent = passage.label;
   document.getElementById("passageTitle").textContent = passage.title;
   document.getElementById("passageBody").innerHTML = passage.body
     .map(line => `<p>${line}</p>`)
     .join("");
 
-  // Question
   document.getElementById("questionText").textContent = q.text;
   document.getElementById("questionExtra").textContent = q.extra || "";
 
-  selectedOptions.clear();
-  document.getElementById("submitMultiBtn").disabled = q.type !== "multi";
+  selectedIndex = null;
   document.getElementById("nextBtn").disabled = true;
-
   hideFeedback();
   renderOptions(q);
 }
@@ -679,102 +691,54 @@ function renderOptions(q) {
   const grid = document.getElementById("optionsGrid");
   grid.innerHTML = "";
 
-  const shuffled = [...q.options].sort(() => Math.random() - 0.5);
-
-  shuffled.forEach((opt, idx) => {
+  q.options.forEach((opt, idx) => {
     const btn = document.createElement("button");
     btn.className = "option-btn";
     btn.dataset.index = idx;
-
-    btn.innerHTML = `
-      <div><strong>${String.fromCharCode(65 + idx)}.</strong> ${opt.text}</div>
-    `;
-
-    btn.onclick = () => handleOptionClick(q, shuffled, idx, btn);
+    btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> ${opt.text}`;
+    btn.onclick = () => handleOptionClick(q, idx);
     grid.appendChild(btn);
   });
 }
 
 /************************************************************
- * OPTION CLICK HANDLER
+ * OPTION CLICK
  ************************************************************/
-function handleOptionClick(q, opts, idx, btn) {
-  if (q.type === "single") {
-    document.querySelectorAll(".option-btn").forEach(b => b.dataset.state = "");
-    btn.dataset.state = "selected";
-    selectedOptions = new Set([idx]);
-    checkSingle(q, opts);
-  } else {
-    if (selectedOptions.has(idx)) {
-      selectedOptions.delete(idx);
-      btn.dataset.state = "";
-    } else {
-      selectedOptions.add(idx);
-      btn.dataset.state = "selected";
-    }
-    document.getElementById("submitMultiBtn").disabled = selectedOptions.size === 0;
-  }
+function handleOptionClick(q, idx) {
+  if (selectedIndex !== null) return; // lock after first choice
+
+  selectedIndex = idx;
+  const buttons = document.querySelectorAll(".option-btn");
+  buttons.forEach(b => b.dataset.state = "");
+  buttons[idx].dataset.state = "selected";
+
+  checkSingle(q);
 }
 
 /************************************************************
- * SINGLE SELECT CHECK
+ * CHECK SINGLE
  ************************************************************/
-function checkSingle(q, opts) {
-  const idx = [...selectedOptions][0];
-  const chosen = opts[idx];
+function checkSingle(q) {
+  const chosen = q.options[selectedIndex];
+  const buttons = document.querySelectorAll(".option-btn");
+
+  q.options.forEach((opt, idx) => {
+    if (opt.correct) buttons[idx].dataset.state = "correct";
+    else if (idx === selectedIndex) buttons[idx].dataset.state = "incorrect";
+    buttons[idx].disabled = true;
+  });
 
   if (chosen.correct) {
     correctCount++;
-    strandTotals[q.skill].correct++;
+    if (strandTotals[q.skill]) strandTotals[q.skill].correct++;
     showFeedback(true, q.explanation);
   } else {
     incorrectCount++;
     showFeedback(false, q.explanation);
   }
 
-  lockOptions(q, opts);
   updateScore();
   document.getElementById("nextBtn").disabled = false;
-}
-
-/************************************************************
- * MULTI SELECT SUBMIT
- ************************************************************/
-document.getElementById("submitMultiBtn").onclick = () => {
-  const q = questions[currentIndex];
-  const correctSet = new Set(
-    q.options.map((o, i) => (o.correct ? i : null)).filter(i => i !== null)
-  );
-
-  const isCorrect =
-    correctSet.size === selectedOptions.size &&
-    [...correctSet].every(x => selectedOptions.has(x));
-
-  if (isCorrect) {
-    correctCount++;
-    strandTotals[q.skill].correct++;
-    showFeedback(true, q.explanation);
-  } else {
-    incorrectCount++;
-    showFeedback(false, q.explanation);
-  }
-
-  lockOptions(q, q.options);
-  updateScore();
-  document.getElementById("nextBtn").disabled = false;
-};
-
-/************************************************************
- * LOCK OPTIONS
- ************************************************************/
-function lockOptions(q, opts) {
-  const buttons = document.querySelectorAll(".option-btn");
-  buttons.forEach((btn, idx) => {
-    const opt = opts[idx];
-    if (opt.correct) btn.dataset.state = "correct";
-    else if (selectedOptions.has(idx)) btn.dataset.state = "incorrect";
-    btn.disabled = true;
-  });
 }
 
 /************************************************************
@@ -816,7 +780,7 @@ function updateScore() {
 }
 
 /************************************************************
- * NEXT QUESTION
+ * NEXT
  ************************************************************/
 document.getElementById("nextBtn").onclick = () => {
   currentIndex++;
@@ -828,7 +792,7 @@ document.getElementById("nextBtn").onclick = () => {
 };
 
 /************************************************************
- * SUMMARY MODAL
+ * SUMMARY
  ************************************************************/
 function showSummary() {
   clearInterval(timerInterval);
@@ -857,9 +821,11 @@ document.getElementById("restartFromSummaryBtn").onclick =
 document.getElementById("restartBtn").onclick = () => {
   location.reload();
 };
-  /************************************************************
- * END OF SCRIPT
- ************************************************************/
+
+document.getElementById("summaryBtn").onclick = () => {
+  showSummary();
+};
 </script>
+
 </body>
 </html>
