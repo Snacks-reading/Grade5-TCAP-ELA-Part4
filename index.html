@@ -334,31 +334,15 @@ body {
 
 </style>
 </head>
-</head>
 <body>
-
-<!-- Floating Timer -->
-<div class="timer-floating" id="timer" data-state="ok">
-  <div class="timer-dot"></div>
-  <div>
-    <div class="timer-label">Time</div>
-    <div class="timer-value" id="timerValue">00:00</div>
-  </div>
-  <div class="timer-controls">
-    <button class="timer-btn" id="pauseBtn">Pause</button>
-    <button class="timer-btn" id="resumeBtn" disabled>Resume</button>
-  </div>
-</div>
 
 <div class="app-shell">
 
   <!-- LEFT PANEL -->
   <aside class="panel">
     <div class="panel-header">
-      <div class="title-block">
-        <h1>TN TCAP ELA Engine</h1>
-        <p>Grade 5 • Subpart 4 – Editing & Language</p>
-      </div>
+      <h1>TN TCAP ELA Engine</h1>
+      <p>Grade 5 • Subpart 4 – Editing & Language</p>
       <span class="chip">Practice Set</span>
     </div>
 
@@ -379,6 +363,7 @@ body {
           <div class="progress-bar-fill" id="scoreBar"></div>
         </div>
       </div>
+
       <div class="meta-card">
         <div class="meta-label">Items completed</div>
         <div class="meta-value">
@@ -391,13 +376,6 @@ body {
     </div>
 
     <div class="dashboard-section-title">Breakdown</div>
-    <div class="score-row">
-      <div>
-        <div class="score-main" id="rawScore">0 / 0</div>
-        <div class="score-sub" id="scoreSub">0 correct • 0 incorrect</div>
-      </div>
-    </div>
-
     <div class="score-badges">
       <span class="score-badge" id="conventionsBadge">Conventions: 0/0</span>
       <span class="score-badge" id="revisionBadge">Revision: 0/0</span>
@@ -414,8 +392,8 @@ body {
 
     <div class="dashboard-section-title">How this works</div>
     <div class="mini-list">
-      <p class="tag-lit"><strong>Single choice:</strong> One correct answer. Choose the best fix.</p>
-      <p class="tag-info"><strong>Multiple select:</strong> The prompt tells you. All correct options must be chosen to earn credit.</p>
+      <p><strong>Single choice:</strong> One correct answer. Choose the best fix.</p>
+      <p><strong>Multiple select:</strong> The prompt tells you. All correct options must be chosen.</p>
       <p><strong>Feedback:</strong> Every miss tells you why it’s wrong and what the correct choice is doing.</p>
     </div>
 
@@ -435,36 +413,20 @@ body {
     </section>
 
     <section class="question-card">
-      <div class="question-header-row">
-        <div class="question-index" id="questionIndex">Question 1</div>
-        <div class="question-standard" id="questionStandard">Standard: —</div>
-      </div>
-
       <div class="question-text" id="questionText">Loading question…</div>
       <div class="question-extra" id="questionExtra"></div>
 
       <div class="options-grid" id="optionsGrid"></div>
 
       <div class="feedback-row">
-        <div class="feedback-icon correct hidden" id="feedbackIconCorrect">✓</div>
-        <div class="feedback-icon incorrect hidden" id="feedbackIconIncorrect">!</div>
         <div class="feedback-text" id="feedbackText"></div>
       </div>
 
       <div class="explanation" id="explanationBox"></div>
 
       <div class="nav-row">
-        <div class="nav-left">
-          <span id="navProgress">1 / 1</span> •
-          <span id="navType">Editing</span>
-        </div>
-        <div class="nav-right">
-          <span class="pill-mini" id="navTag">Subpart 4</span>
-          <button class="btn btn-ghost" id="submitMultiBtn" disabled>Submit answer</button>
-          <button class="btn btn-primary" id="nextBtn" disabled>
-            Next <span id="nextLabelArrow">→</span>
-          </button>
-        </div>
+        <button class="btn btn-ghost" id="submitMultiBtn" disabled>Submit answer</button>
+        <button class="btn btn-primary" id="nextBtn" disabled>Next →</button>
       </div>
     </section>
 
@@ -475,6 +437,7 @@ body {
 <div class="modal-backdrop" id="summaryModal" data-open="false">
   <div class="modal">
     <h2>Session summary</h2>
+
     <p id="summaryHeadline">You’ve completed this Subpart 4 practice set.</p>
 
     <div class="summary-grid">
@@ -482,22 +445,21 @@ body {
         <div class="summary-label">Score</div>
         <div class="summary-value" id="summaryScore">0%</div>
       </div>
+
       <div class="summary-card">
         <div class="summary-label">Correct</div>
         <div class="summary-value" id="summaryCorrect">0</div>
       </div>
+
       <div class="summary-card">
         <div class="summary-label">Time</div>
         <div class="summary-value" id="summaryTime">00:00</div>
       </div>
     </div>
 
-    <div class="mini-list summary-mini">
-      <p id="summaryConventions">Conventions: 0/0 correct</p>
-      <p id="summaryRevision">Revision: 0/0 correct</p>
-      <p id="summaryOrganization">Organization & Clarity: 0/0 correct</p>
-      <p><strong>Next move:</strong> Target the lowest strand first. Run again and watch the bars move.</p>
-    </div>
+    <p id="summaryConventions"></p>
+    <p id="summaryRevision"></p>
+    <p id="summaryOrganization"></p>
 
     <div class="modal-footer">
       <button class="btn btn-ghost" id="closeSummaryBtn">Close</button>
@@ -506,6 +468,7 @@ body {
   </div>
 </div>
 
+<script>
 <!-- BEGIN SCRIPT SECTION -->
 <script> <script>
   ************************************************************
@@ -517,12 +480,12 @@ const passages = [
     label: "Editing Passage • Narrative",
     title: "The Surprise Class Visitor",
     body: [
-      "Last Friday, our teacher told us we _was having_ a surprise visitor. Everyone started guessing who it might be.",
+      "Last Friday, our teacher told us we _was having_ a surprise visitor.",
       "Some students thought it would be a firefighter, and others _thinks_ it might be a famous author.",
-      "When the door finally opened, a woman in a bright blue jacket walked in. She smiled and said, “Good morning, I’m Dr. Lopez, a scientist who studies oceans.”",
-      "Our teacher _have been planning_ this visit for weeks, but she kept it a secret.",
-      "Dr. Lopez showed us pictures of coral reefs and explained how pollution _are hurting_ sea animals.",
-      "By the end of her visit, we all agreed that protecting the ocean _is very important job_."
+      "When the door opened, a woman in a bright blue jacket walked in.",
+      "Our teacher _have been planning_ this visit for weeks.",
+      "Dr. Lopez explained how pollution _are hurting_ sea animals.",
+      "We all agreed that protecting the ocean _is very important job_."
     ]
   },
 
@@ -532,9 +495,9 @@ const passages = [
     title: "How Compost Helps Gardens",
     body: [
       "Compost is a mixture of old food scraps and yard waste that _break down_ over time.",
-      "Instead of throwing away banana peels and leaves, people can put them in a compost bin.",
-      "Tiny organisms, like bacteria and worms, help turn the scraps into rich soil. This soil is called compost, and it _provide_ plants with nutrients.",
-      "Gardeners like compost because it keeps soil moist, and it can reduce the amount of trash that goes to landfills.",
+      "Tiny organisms help turn the scraps into rich soil.",
+      "This soil is called compost, and it _provide_ plants with nutrients.",
+      "Gardeners like compost because it keeps soil moist.",
       "Using compost is one way people can _helping_ the environment."
     ]
   },
@@ -544,10 +507,9 @@ const passages = [
     label: "Editing Passage • Opinion",
     title: "Why School Libraries Matter",
     body: [
-      "Some students think the school library is just a quiet place, but I believe it is the heart of our school.",
+      "Some students think the school library is just a quiet place.",
       "The library gives us a space where we can _discover new ideas and learning about_ different cultures.",
-      "When students check out books, they practice choosing what interests them.",
-      "The librarian also helps us find sources for projects, which _make_ our research stronger.",
+      "The librarian helps us find sources for projects, which _make_ our research stronger.",
       "For these reasons, I think every school _should have more longer_ library time each week."
     ]
   }
@@ -556,25 +518,19 @@ const passages = [
  * QUESTIONS — FULL TCAP SUBPART 4 SET (15 ITEMS)
  ************************************************************/
 const questions = [
-
-  /* ————————————————
-     PASSAGE 1 — Narrative
-  ———————————————— */
-
   {
     id: 1,
     passageId: "P1",
     type: "single",
     skill: "conventions",
-    standard: "L.5.1 — Verb tense",
-    text: "Which correction is needed for the underlined phrase _was having_ in the first sentence?",
+    text: "Which correction is needed for _was having_?",
     options: [
-      { text: "were having", correct: true,  why: "Plural subject 'we' requires 'were'." },
-      { text: "was had", correct: false,     why: "Incorrect tense and meaning." },
-      { text: "are having", correct: false,  why: "Changes the tense to present." },
-      { text: "No change", correct: false,   why: "'We was' is not correct usage." }
+      { text: "were having", correct: true },
+      { text: "was had", correct: false },
+      { text: "are having", correct: false },
+      { text: "No change", correct: false }
     ],
-    explanation: "The plural subject 'we' needs the verb 'were having.'"
+    explanation: "Plural subject 'we' requires 'were having.'"
   },
 
   {
@@ -582,15 +538,14 @@ const questions = [
     passageId: "P1",
     type: "single",
     skill: "conventions",
-    standard: "L.5.1 — Subject‑verb agreement",
-    text: "Which correction is needed for the underlined word _thinks_ in the second sentence?",
+    text: "Which correction is needed for _thinks_?",
     options: [
-      { text: "think", correct: true,  why: "Plural subject 'others' requires 'think'." },
-      { text: "thinking", correct: false, why: "Incorrect form for this sentence." },
-      { text: "has thought", correct: false, why: "Incorrect tense and meaning." },
-      { text: "No change", correct: false, why: "'Others thinks' is incorrect." }
+      { text: "think", correct: true },
+      { text: "thinking", correct: false },
+      { text: "has thought", correct: false },
+      { text: "No change", correct: false }
     ],
-    explanation: "Plural subjects like 'others' use the base verb 'think.'"
+    explanation: "Plural subject 'others' requires 'think.'"
   },
 
   {
@@ -598,16 +553,14 @@ const questions = [
     passageId: "P1",
     type: "single",
     skill: "conventions",
-    standard: "L.5.1 — Verb tense",
-    text: "Which correction is needed for the underlined phrase _have been planning_?",
-    extra: "Our teacher _have been planning_ this visit for weeks, but she kept it a secret.",
+    text: "Which correction is needed for _have been planning_?",
     options: [
-      { text: "has been planning", correct: true, why: "Singular subject 'teacher' requires 'has'." },
-      { text: "had been planning", correct: false, why: "Changes the time relationship." },
-      { text: "have planned", correct: false, why: "Incorrect aspect for this context." },
-      { text: "No change", correct: false, why: "'Teacher have' is incorrect." }
+      { text: "has been planning", correct: true },
+      { text: "had been planning", correct: false },
+      { text: "have planned", correct: false },
+      { text: "No change", correct: false }
     ],
-    explanation: "The singular subject 'teacher' needs 'has been planning.'"
+    explanation: "Singular subject 'teacher' requires 'has been planning.'"
   },
 
   {
@@ -615,16 +568,14 @@ const questions = [
     passageId: "P1",
     type: "single",
     skill: "conventions",
-    standard: "L.5.1 — Verb tense",
-    text: "Which correction is needed for the underlined phrase _are hurting_?",
-    extra: "Pollution _are hurting_ sea animals.",
+    text: "Which correction is needed for _are hurting_?",
     options: [
-      { text: "is hurting", correct: true, why: "Singular subject 'pollution' requires 'is'." },
-      { text: "were hurting", correct: false, why: "Incorrect tense shift." },
-      { text: "be hurting", correct: false, why: "Not a standard construction." },
-      { text: "No change", correct: false, why: "'Pollution are' is incorrect." }
+      { text: "is hurting", correct: true },
+      { text: "were hurting", correct: false },
+      { text: "be hurting", correct: false },
+      { text: "No change", correct: false }
     ],
-    explanation: "The singular noun 'pollution' needs 'is hurting.'"
+    explanation: "Singular noun 'pollution' requires 'is hurting.'"
   },
 
   {
@@ -632,193 +583,24 @@ const questions = [
     passageId: "P1",
     type: "single",
     skill: "revision",
-    standard: "W.5.2d — Precise language",
-    text: "Which revision best improves the phrase _is very important job_?",
+    text: "Which revision improves _is very important job_?",
     options: [
-      { text: "is a very important job", correct: true, why: "Adds the needed article 'a'." },
-      { text: "is very important jobs", correct: false, why: "Plural 'jobs' does not fit." },
-      { text: "is very importantly job", correct: false, why: "Incorrect adverb usage." },
-      { text: "No change", correct: false, why: "Missing article 'a'." }
+      { text: "is a very important job", correct: true },
+      { text: "is very important jobs", correct: false },
+      { text: "is very importantly job", correct: false },
+      { text: "No change", correct: false }
     ],
-    explanation: "The article 'a' is required for correct grammar."
-  },
-
-  {
-    id: 6,
-    passageId: "P1",
-    type: "single",
-    skill: "conventions",
-    standard: "L.5.2 — Commas in dialogue",
-    text: "Which sentence uses commas and quotation marks correctly?",
-    options: [
-      { text: "“Good morning I’m Dr. Lopez” she said.", correct: false, why: "Missing comma after 'morning'." },
-      { text: "“Good morning, I’m Dr. Lopez,” she said.", correct: true, why: "Correct comma placement inside quotes." },
-      { text: "“Good morning, I’m Dr. Lopez”, she said.", correct: false, why: "Comma must be inside the quotation marks." },
-      { text: "“Good morning.” I’m Dr. Lopez she said.", correct: false, why: "Incorrect punctuation and capitalization." }
-    ],
-    explanation: "Dialogue requires the comma inside the quotation marks."
-  },
-
-  /* ————————————————
-     PASSAGE 2 — Informational
-  ———————————————— */
-
-  {
-    id: 7,
-    passageId: "P2",
-    type: "single",
-    skill: "conventions",
-    standard: "L.5.1 — Verb tense",
-    text: "Which correction is needed for the underlined phrase _break down_?",
-    options: [
-      { text: "breaks down", correct: true, why: "Singular subject 'mixture' requires 'breaks'." },
-      { text: "breaking down", correct: false, why: "Incorrect tense for this sentence." },
-      { text: "have broken down", correct: false, why: "Incorrect aspect." },
-      { text: "No change", correct: false, why: "'Mixture break' is incorrect." }
-    ],
-    explanation: "The singular subject 'mixture' needs 'breaks down.'"
-  },
-
-  {
-    id: 8,
-    passageId: "P2",
-    type: "single",
-    skill: "conventions",
-    standard: "L.5.1 — Subject‑verb agreement",
-    text: "Which correction is needed for the underlined word _provide_?",
-    options: [
-      { text: "provides", correct: true, why: "Singular subject 'compost' requires 'provides'." },
-      { text: "provided", correct: false, why: "Incorrect tense." },
-      { text: "is providing", correct: false, why: "Incorrect aspect." },
-      { text: "No change", correct: false, why: "'Compost provide' is incorrect." }
-    ],
-    explanation: "The singular noun 'compost' needs 'provides.'"
-  },
-
-  {
-    id: 9,
-    passageId: "P2",
-    type: "single",
-    skill: "revision",
-    standard: "W.5.2d — Clarity",
-    text: "Which revision best improves the phrase _helping the environment_?",
-    options: [
-      { text: "help protect the environment", correct: true, why: "More precise and formal." },
-      { text: "helping out the environment", correct: false, why: "Informal and unclear." },
-      { text: "help the environment lots", correct: false, why: "Too informal for informational text." },
-      { text: "No change", correct: false, why: "Original is vague." }
-    ],
-    explanation: "Informational writing benefits from precise, formal language."
-  },
-
-  {
-    id: 10,
-    passageId: "P2",
-    type: "single",
-    skill: "organization",
-    standard: "W.5.2 — Logical order",
-    text: "Where would the sentence 'Compost also reduces the need for chemical fertilizers.' best fit?",
-    options: [
-      { text: "After the sentence about nutrients", correct: true, why: "It logically extends the idea of soil improvement." },
-      { text: "At the very beginning", correct: false, why: "Too specific for an introduction." },
-      { text: "After the sentence about landfills", correct: false, why: "Does not connect to waste reduction." },
-      { text: "At the end of the passage", correct: false, why: "Interrupts the conclusion." }
-    ],
-    explanation: "It fits best after discussing how compost enriches soil."
-  },
-
-  /* ————————————————
-     PASSAGE 3 — Opinion
-  ———————————————— */
-
-  {
-    id: 11,
-    passageId: "P3",
-    type: "single",
-    skill: "conventions",
-    standard: "L.5.1 — Verb tense",
-    text: "Which correction is needed for the underlined phrase _discover new ideas and learning about_?",
-    options: [
-      { text: "discover new ideas and learn about", correct: true, why: "Parallel structure requires matching verb forms." },
-      { text: "discovering new ideas and learning about", correct: false, why: "Does not match the sentence structure." },
-      { text: "discover new ideas and learned about", correct: false, why: "Incorrect tense shift." },
-      { text: "No change", correct: false, why: "Not parallel structure." }
-    ],
-    explanation: "Parallel verbs must match: 'discover' and 'learn.'"
-  },
-
-  {
-    id: 12,
-    passageId: "P3",
-    type: "single",
-    skill: "conventions",
-    standard: "L.5.1 — Subject‑verb agreement",
-    text: "Which correction is needed for the underlined word _make_?",
-    options: [
-      { text: "makes", correct: true, why: "Singular subject 'librarian' requires 'makes'." },
-      { text: "making", correct: false, why: "Incorrect form." },
-      { text: "made", correct: false, why: "Incorrect tense." },
-      { text: "No change", correct: false, why: "'Librarian make' is incorrect." }
-    ],
-    explanation: "The singular subject 'librarian' needs 'makes.'"
-  },
-
-  {
-    id: 13,
-    passageId: "P3",
-    type: "single",
-    skill: "revision",
-    standard: "W.5.2d — Word choice",
-    text: "Which revision best improves the phrase _should have more longer_?",
-    options: [
-      { text: "should have longer", correct: true, why: "Removes the double comparative." },
-      { text: "should have more long", correct: false, why: "Incorrect adjective form." },
-      { text: "should have the most longer", correct: false, why: "Incorrect comparative structure." },
-      { text: "No change", correct: false, why: "Double comparative is incorrect." }
-    ],
-    explanation: "Only one comparative form is needed: 'longer.'"
-  },
-
-  {
-    id: 14,
-    passageId: "P3",
-    type: "multi",
-    skill: "revision",
-    standard: "W.5.2 — Evidence",
-    text: "Which TWO sentences best support the opinion that the library is the heart of the school?",
-    options: [
-      { text: "The library gives us a space to discover new ideas.", correct: true, why: "Supports the central idea." },
-      { text: "The librarian helps us find sources for projects.", correct: true, why: "Shows the library's importance." },
-      { text: "Some students think the library is quiet.", correct: false, why: "Does not support the opinion." },
-      { text: "Students check out books.", correct: false, why: "Too general; not strong evidence." }
-    ],
-    explanation: "Strong evidence directly supports the opinion stated."
-  },
-
-  {
-    id: 15,
-    passageId: "P3",
-    type: "single",
-    skill: "organization",
-    standard: "W.5.2 — Conclusion",
-    text: "Which sentence best strengthens the conclusion of the passage?",
-    options: [
-      { text: "The library helps every student grow as a learner.", correct: true, why: "Strong concluding idea." },
-      { text: "The library has many shelves.", correct: false, why: "Not relevant to the opinion." },
-      { text: "Some students read during lunch.", correct: false, why: "Too specific and unrelated." },
-      { text: "Books are important.", correct: false, why: "Too vague." }
-    ],
-    explanation: "A strong conclusion reinforces the main opinion."
+    explanation: "The article 'a' is required."
   }
-
 ];
   /************************************************************
  * ENGINE STATE
  ************************************************************/
+/************************************************************
+ * ENGINE STATE
+ ************************************************************/
 let currentIndex = 0;
 let selectedOptions = new Set();
-let isMulti = false;
-let score = 0;
 let correctCount = 0;
 let incorrectCount = 0;
 
@@ -830,42 +612,22 @@ let strandTotals = {
 
 let timerSeconds = 0;
 let timerInterval = null;
-let timerPaused = false;
 
 /************************************************************
  * TIMER
  ************************************************************/
 function startTimer() {
   timerInterval = setInterval(() => {
-    if (!timerPaused) {
-      timerSeconds++;
-      updateTimerDisplay();
-    }
+    timerSeconds++;
+    updateTimerDisplay();
   }, 1000);
 }
 
 function updateTimerDisplay() {
   const m = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
   const s = String(timerSeconds % 60).padStart(2, "0");
-  document.getElementById("timerValue").textContent = `${m}:${s}`;
-
-  const timerBox = document.getElementById("timer");
-  if (timerSeconds < 60) timerBox.dataset.state = "ok";
-  else if (timerSeconds < 120) timerBox.dataset.state = "warning";
-  else timerBox.dataset.state = "danger";
+  document.getElementById("summaryTime").textContent = `${m}:${s}`;
 }
-
-document.getElementById("pauseBtn").onclick = () => {
-  timerPaused = true;
-  document.getElementById("pauseBtn").disabled = true;
-  document.getElementById("resumeBtn").disabled = false;
-};
-
-document.getElementById("resumeBtn").onclick = () => {
-  timerPaused = false;
-  document.getElementById("resumeBtn").disabled = true;
-  document.getElementById("pauseBtn").disabled = false;
-};
 
 /************************************************************
  * INITIALIZE
@@ -899,26 +661,15 @@ function loadQuestion() {
     .join("");
 
   // Question
-  document.getElementById("questionIndex").textContent = `Question ${currentIndex + 1}`;
-  document.getElementById("questionStandard").textContent = `Standard: ${q.standard}`;
   document.getElementById("questionText").textContent = q.text;
   document.getElementById("questionExtra").textContent = q.extra || "";
 
-  // Reset UI
   selectedOptions.clear();
-  isMulti = q.type === "multi";
-  document.getElementById("submitMultiBtn").disabled = !isMulti;
-  document.getElementById("submitMultiBtn").style.display = isMulti ? "inline-flex" : "none";
+  document.getElementById("submitMultiBtn").disabled = q.type !== "multi";
   document.getElementById("nextBtn").disabled = true;
 
   hideFeedback();
-
-  // Render options
   renderOptions(q);
-
-  // Update nav
-  document.getElementById("navProgress").textContent = `${currentIndex + 1} / ${questions.length}`;
-  document.getElementById("navType").textContent = q.type === "multi" ? "Multiple Select" : "Editing";
 }
 
 /************************************************************
@@ -928,7 +679,6 @@ function renderOptions(q) {
   const grid = document.getElementById("optionsGrid");
   grid.innerHTML = "";
 
-  // Randomize order
   const shuffled = [...q.options].sort(() => Math.random() - 0.5);
 
   shuffled.forEach((opt, idx) => {
@@ -937,8 +687,7 @@ function renderOptions(q) {
     btn.dataset.index = idx;
 
     btn.innerHTML = `
-      <div class="option-key">${String.fromCharCode(65 + idx)}</div>
-      <div>${opt.text}</div>
+      <div><strong>${String.fromCharCode(65 + idx)}.</strong> ${opt.text}</div>
     `;
 
     btn.onclick = () => handleOptionClick(q, shuffled, idx, btn);
@@ -951,13 +700,11 @@ function renderOptions(q) {
  ************************************************************/
 function handleOptionClick(q, opts, idx, btn) {
   if (q.type === "single") {
-    // Clear all
     document.querySelectorAll(".option-btn").forEach(b => b.dataset.state = "");
     btn.dataset.state = "selected";
     selectedOptions = new Set([idx]);
     checkSingle(q, opts);
   } else {
-    // Multi-select
     if (selectedOptions.has(idx)) {
       selectedOptions.delete(idx);
       btn.dataset.state = "";
@@ -979,10 +726,10 @@ function checkSingle(q, opts) {
   if (chosen.correct) {
     correctCount++;
     strandTotals[q.skill].correct++;
-    showFeedback(true, chosen.why, q.explanation);
+    showFeedback(true, q.explanation);
   } else {
     incorrectCount++;
-    showFeedback(false, chosen.why, q.explanation);
+    showFeedback(false, q.explanation);
   }
 
   lockOptions(q, opts);
@@ -995,29 +742,27 @@ function checkSingle(q, opts) {
  ************************************************************/
 document.getElementById("submitMultiBtn").onclick = () => {
   const q = questions[currentIndex];
-  const opts = [...document.querySelectorAll(".option-btn")].map((btn, i) => q.options[i]);
+  const correctSet = new Set(
+    q.options.map((o, i) => (o.correct ? i : null)).filter(i => i !== null)
+  );
 
-  const correctSet = new Set(q.options.map((o, i) => o.correct ? i : null).filter(i => i !== null));
-
-  const isCorrect = setsEqual(correctSet, selectedOptions);
+  const isCorrect =
+    correctSet.size === selectedOptions.size &&
+    [...correctSet].every(x => selectedOptions.has(x));
 
   if (isCorrect) {
     correctCount++;
     strandTotals[q.skill].correct++;
-    showFeedback(true, "All correct options selected.", q.explanation);
+    showFeedback(true, q.explanation);
   } else {
     incorrectCount++;
-    showFeedback(false, "Your selection does not match all correct answers.", q.explanation);
+    showFeedback(false, q.explanation);
   }
 
   lockOptions(q, q.options);
   updateScore();
   document.getElementById("nextBtn").disabled = false;
 };
-
-function setsEqual(a, b) {
-  return a.size === b.size && [...a].every(x => b.has(x));
-}
 
 /************************************************************
  * LOCK OPTIONS
@@ -1035,28 +780,17 @@ function lockOptions(q, opts) {
 /************************************************************
  * FEEDBACK
  ************************************************************/
-function showFeedback(isCorrect, why, explanation) {
-  const iconC = document.getElementById("feedbackIconCorrect");
-  const iconI = document.getElementById("feedbackIconIncorrect");
+function showFeedback(isCorrect, explanation) {
   const text = document.getElementById("feedbackText");
   const exp = document.getElementById("explanationBox");
 
-  iconC.classList.add("hidden");
-  iconI.classList.add("hidden");
-
-  if (isCorrect) iconC.classList.remove("hidden");
-  else iconI.classList.remove("hidden");
-
-  text.textContent = why;
+  text.textContent = isCorrect ? "Correct!" : "Incorrect.";
   exp.textContent = explanation;
-  exp.dataset.visible = "true";
 }
 
 function hideFeedback() {
-  document.getElementById("feedbackIconCorrect").classList.add("hidden");
-  document.getElementById("feedbackIconIncorrect").classList.add("hidden");
   document.getElementById("feedbackText").textContent = "";
-  document.getElementById("explanationBox").dataset.visible = "false";
+  document.getElementById("explanationBox").textContent = "";
 }
 
 /************************************************************
@@ -1064,18 +798,15 @@ function hideFeedback() {
  ************************************************************/
 function updateScore() {
   const total = questions.length;
-  score = Math.round((correctCount / total) * 100);
+  const score = Math.round((correctCount / total) * 100);
 
   document.getElementById("scorePercent").textContent = `${score}%`;
-  document.getElementById("rawScore").textContent = `${correctCount} / ${total}`;
-  document.getElementById("scoreSub").textContent = `${correctCount} correct • ${incorrectCount} incorrect`;
-
   document.getElementById("scoreBar").style.width = `${score}%`;
-  document.getElementById("progressBar").style.width = `${((currentIndex + 1) / total) * 100}%`;
 
   document.getElementById("completedCount").textContent = currentIndex + 1;
+  document.getElementById("progressBar").style.width =
+    `${((currentIndex + 1) / total) * 100}%`;
 
-  // Strand badges
   document.getElementById("conventionsBadge").textContent =
     `Conventions: ${strandTotals.conventions.correct}/${strandTotals.conventions.total}`;
   document.getElementById("revisionBadge").textContent =
@@ -1102,19 +833,18 @@ document.getElementById("nextBtn").onclick = () => {
 function showSummary() {
   clearInterval(timerInterval);
 
+  const total = questions.length;
+  const score = Math.round((correctCount / total) * 100);
+
   document.getElementById("summaryScore").textContent = `${score}%`;
   document.getElementById("summaryCorrect").textContent = correctCount;
 
-  const m = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
-  const s = String(timerSeconds % 60).padStart(2, "0");
-  document.getElementById("summaryTime").textContent = `${m}:${s}`;
-
   document.getElementById("summaryConventions").textContent =
-    `Conventions: ${strandTotals.conventions.correct}/${strandTotals.conventions.total} correct`;
+    `Conventions: ${strandTotals.conventions.correct}/${strandTotals.conventions.total}`;
   document.getElementById("summaryRevision").textContent =
-    `Revision: ${strandTotals.revision.correct}/${strandTotals.revision.total} correct`;
+    `Revision: ${strandTotals.revision.correct}/${strandTotals.revision.total}`;
   document.getElementById("summaryOrganization").textContent =
-    `Organization & Clarity: ${strandTotals.organization.correct}/${strandTotals.organization.total} correct`;
+    `Organization & Clarity: ${strandTotals.organization.correct}/${strandTotals.organization.total}`;
 
   document.getElementById("summaryModal").dataset.open = "true";
 }
@@ -1131,6 +861,5 @@ document.getElementById("restartBtn").onclick = () => {
  * END OF SCRIPT
  ************************************************************/
 </script>
-
 </body>
 </html>
