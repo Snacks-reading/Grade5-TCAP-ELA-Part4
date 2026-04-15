@@ -2,1701 +2,617 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>TN TCAP Grade 5 ELA – Subpart 4 Practice Engine</title>
+  <title>TN TCAP Grade 5 ELA – Subpart 4 Practice</title>
   <style>
-    :root {
-      --lilac-main: #b38cff;
-      --lilac-dark: #7a5ad9;
-      --lilac-soft: #f4efff;
-      --accent-green: #2eaf7d;
-      --accent-red: #e0526f;
-      --bg-deep: #0f0b1a;
-      --card-bg: #181326;
-      --text-main: #000000;
-      --text-light: #f7f4ff;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top left, #2b1f4a 0, #0b0714 45%, #05030a 100%);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-    }
-
-    .app-shell {
-      display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
-      gap: 18px;
-      width: min(1200px, 100%);
-      padding: 18px;
-    }
-
-    @media (max-width: 900px) {
-      .app-shell {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow:
-        0 18px 40px rgba(0,0,0,0.6),
-        0 0 0 1px rgba(255,255,255,0.02);
-      backdrop-filter: blur(18px);
-      padding: 18px 20px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(179,140,255,0.18), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(255,255,255,0.06), transparent 55%);
-      opacity: 0.9;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .title-block h1 {
-      font-size: 1.1rem;
-      margin: 0;
-      color: var(--lilac-soft);
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-
-    .title-block p {
-      margin: 2px 0 0;
-      font-size: 0.78rem;
-      color: rgba(244,239,255,0.8);
-    }
-
-    .chip {
-      font-size: 0.7rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(179,140,255,0.16);
-      color: var(--lilac-soft);
-      border: 1px solid rgba(179,140,255,0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .avatar-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 14px;
-    }
-
-    .avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      background: radial-gradient(circle at 30% 0%, #ffe27a 0, #f7b733 30%, #f05a28 70%, #7a5ad9 100%);
-      position: relative;
-      box-shadow:
-        0 0 0 2px rgba(255,255,255,0.18),
-        0 10px 20px rgba(0,0,0,0.6);
-      overflow: hidden;
-    }
-
-    .avatar::after {
-      content: "";
-      position: absolute;
-      inset: 18% 22%;
-      border-radius: 999px;
-      border: 2px solid #f7f4ff;
-      border-bottom-color: transparent;
-      border-left-color: transparent;
-      transform: rotate(18deg);
-    }
-
-    .avatar-text {
-      font-size: 0.8rem;
-      color: rgba(244,239,255,0.9);
-    }
-
-    .avatar-text strong {
-      color: var(--lilac-soft);
-    }
-
-    .meta-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .meta-card {
-      background: rgba(8,4,20,0.8);
-      border-radius: 12px;
-      padding: 8px 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      color: var(--lilac-soft);
-      font-size: 0.75rem;
-    }
-
-    .meta-label {
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.65rem;
-      opacity: 0.7;
-      margin-bottom: 2px;
-    }
-
-    .meta-value {
-      font-weight: 600;
-    }
-
-    .progress-bar-shell {
-      margin-top: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--lilac-main), #ffb86c);
-      transition: width 0.25s ease-out;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .pill {
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(244,239,255,0.2);
-      color: rgba(244,239,255,0.9);
-      background: rgba(8,4,20,0.7);
-    }
-
-    .timer-floating {
-      position: fixed;
-      top: 14px;
-      right: 16px;
-      z-index: 50;
-      background: rgba(8,4,20,0.92);
-      border-radius: 999px;
-      padding: 6px 12px;
-      border: 1px solid rgba(179,140,255,0.7);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.7);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      color: var(--lilac-soft);
-    }
-
-    .timer-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      box-shadow: 0 0 10px rgba(46,175,125,0.9);
-    }
-
-    .timer-floating[data-state="warning"] .timer-dot {
-      background: #ffb86c;
-      box-shadow: 0 0 10px rgba(255,184,108,0.9);
-    }
-
-    .timer-floating[data-state="danger"] .timer-dot {
-      background: var(--accent-red);
-      box-shadow: 0 0 10px rgba(224,82,111,0.9);
-    }
-
-    .timer-label {
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.65rem;
-      opacity: 0.8;
-    }
-
-    .timer-value {
-      font-variant-numeric: tabular-nums;
-      font-weight: 600;
-    }
-
-    .timer-controls {
-      display: flex;
-      gap: 4px;
-      margin-left: 6px;
-    }
-
-    .timer-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(244,239,255,0.4);
-      background: transparent;
-      color: var(--lilac-soft);
-      font-size: 0.65rem;
-      padding: 2px 6px;
-      cursor: pointer;
-    }
-
-    .timer-btn:hover {
-      background: rgba(244,239,255,0.08);
-    }
-
-    .main-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      color: var(--text-main);
-    }
-
-    .passage-card {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 14px 16px;
-      border: 1px solid rgba(0,0,0,0.08);
-      max-height: 260px;
-      overflow: auto;
-    }
-
-    .passage-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #7a5ad9;
-      margin-bottom: 2px;
-    }
-
-    .passage-title {
-      margin: 0 0 6px;
-      font-size: 1rem;
-      color: #1b1335;
-    }
-
-    .passage-body p {
-      margin: 4px 0;
-      font-size: 0.86rem;
-      color: #222222;
-    }
-
-    .question-card {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 14px 16px 16px;
-      border: 1px solid rgba(0,0,0,0.08);
-    }
-
-    .question-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 6px;
-    }
-
-    .question-index {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #7a5ad9;
-    }
-
-    .question-standard {
-      font-size: 0.7rem;
-      color: #555;
-    }
-
-    .question-text {
-      font-size: 0.95rem;
-      color: #000000;
-      margin-bottom: 6px;
-    }
-
-    .question-extra {
-      font-size: 0.8rem;
-      color: #444;
-      margin-bottom: 8px;
-      font-style: italic;
-    }
-
-    .options-grid {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .option-btn {
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,0.12);
-      padding: 8px 10px;
-      font-size: 0.9rem;
-      background: #ffffff;
-      color: #000000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.16s ease-out;
-      text-align: left;
-    }
-
-    .option-btn:hover {
-      border-color: var(--lilac-main);
-      box-shadow: 0 0 0 1px rgba(179,140,255,0.4);
-      transform: translateY(-1px);
-    }
-
-    .option-btn[data-state="selected"] {
-      background: #e6ddff;
-      border-color: var(--lilac-dark);
-      box-shadow: 0 0 0 1px rgba(122,90,217,0.7);
-    }
-
-    .option-btn[data-state="correct"] {
-      background: #e0f7ef;
-      border-color: var(--accent-green);
-      box-shadow: 0 0 0 1px rgba(46,175,125,0.7);
-    }
-
-    .option-btn[data-state="incorrect"] {
-      background: #ffe6ee;
-      border-color: var(--accent-red);
-      box-shadow: 0 0 0 1px rgba(224,82,111,0.7);
-    }
-
-    .option-key {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      background: #ffffff;
-      border: 1px solid rgba(0,0,0,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .feedback-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      font-size: 0.85rem;
-      margin-bottom: 6px;
-      min-height: 24px;
-    }
-
-    .feedback-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      color: #ffffff;
-      flex-shrink: 0;
-    }
-
-    .feedback-icon.correct {
-      background: var(--accent-green);
-    }
-
-    .feedback-icon.incorrect {
-      background: var(--accent-red);
-    }
-
-    .feedback-text {
-      color: #222;
-    }
-
-    .feedback-text strong {
-      font-weight: 600;
-    }
-
-    .explanation {
-      font-size: 0.8rem;
-      color: #444;
-      background: #f7f3ff;
-      border-radius: 10px;
-      padding: 6px 8px;
-      border: 1px dashed rgba(122,90,217,0.5);
-      display: none;
-    }
-
-    .explanation[data-visible="true"] {
-      display: block;
-    }
-
-    .nav-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      gap: 10px;
-    }
-
-    .nav-left {
-      font-size: 0.8rem;
-      color: #333;
-    }
-
-    .nav-left span {
-      font-variant-numeric: tabular-nums;
-    }
-
-    .nav-right {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .btn {
-      border-radius: 999px;
-      border: none;
-      padding: 7px 14px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-weight: 500;
-      transition: all 0.16s ease-out;
-      white-space: nowrap;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--lilac-main), var(--lilac-dark));
-      color: #ffffff;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.4;
-      cursor: default;
-      box-shadow: none;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--lilac-soft);
-      border: 1px solid rgba(122,90,217,0.6);
-    }
-
-    .btn-ghost:hover:not(:disabled) {
-      background: rgba(244,239,255,0.06);
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(0,0,0,0.6);
-    }
-
-    .btn-ghost:disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
-
-    .pill-mini {
-      font-size: 0.7rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(122,90,217,0.1);
-      color: #7a5ad9;
-      border: 1px solid rgba(122,90,217,0.4);
-    }
-
-    .dashboard-section-title {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: rgba(244,239,255,0.8);
-      margin: 10px 0 4px;
-    }
-
-    .score-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 4px;
-    }
-
-    .score-main {
-      font-size: 1.4rem;
-      color: var(--lilac-soft);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .score-sub {
-      font-size: 0.8rem;
-      color: rgba(244,239,255,0.8);
-    }
-
-    .score-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .score-badge {
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(8,4,20,0.9);
-      border: 1px solid rgba(244,239,255,0.16);
-      color: rgba(244,239,255,0.9);
-    }
-
-    .mini-list {
-      margin-top: 6px;
-      font-size: 0.75rem;
-      color: rgba(244,239,255,0.9);
-    }
-
-    .mini-list p {
-      margin: 2px 0;
-    }
-
-    .tag-lit {
-      border-left: 3px solid #ffb86c;
-      padding-left: 6px;
-    }
-
-    .tag-info {
-      border-left: 3px solid #2eaf7d;
-      padding-left: 6px;
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-    }
-
-    .modal-backdrop[data-open="true"] {
-      display: flex;
-    }
-
-    .modal {
-      background: #0f0b1a;
-      border-radius: 18px;
-      border: 1px solid rgba(179,140,255,0.7);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-      padding: 18px 20px;
-      width: min(520px, 92vw);
-      color: var(--lilac-soft);
-    }
-
-    .modal h2 {
-      margin: 0 0 4px;
-      font-size: 1.1rem;
-    }
-
-    .modal p {
-      margin: 4px 0;
-      font-size: 0.85rem;
-    }
-
-    .modal-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .summary-card {
-      background: rgba(8,4,20,0.9);
-      border-radius: 12px;
-      padding: 8px 10px;
-      border: 1px solid rgba(244,239,255,0.16);
-      font-size: 0.75rem;
-    }
-
-    .summary-label {
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.65rem;
-      opacity: 0.8;
-      margin-bottom: 2px;
-    }
-
-    .summary-value {
-      font-variant-numeric: tabular-nums;
-      font-weight: 600;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-  </style>
-</head>
-<body>
-  <div class="timer-floating" id="timer" data-state="ok">
-    <div class="timer-dot"></div>
-    <div>
-      <div class="timer-label">Time</div>
-      <div class="timer-value" id="timerValue">00:00</div>
-    </div>
-    <div class="timer-controls">
-      <button class="timer-btn" id="pauseBtn">Pause</button>
-      <button class="timer-btn" id="resumeBtn" disabled>Resume</button>
-    </div>
-  </div>
-
-  <div class="app-shell">
-    <aside class="panel">
-      <div class="panel-header">
-        <div class="title-block">
-          <h1>TN TCAP ELA Engine</h1>
-          <p>Grade 5 • Subpart 4 – Editing & Language</p>
-        </div>
-        <span class="chip">Practice Set</span>
-      </div>
-
-      <div class="avatar-row">
-        <div class="avatar"></div>
-        <div class="avatar-text">
-          <div><strong>Your Guide:</strong> Lilac Model</div>
-          <div>Fix the sentence. Strengthen the meaning. Watch the score move.</div>
-        </div>
-      </div>
-
-      <div class="dashboard-section-title">Session status</div>
-      <div class="meta-grid">
-        <div class="meta-card">
-          <div class="meta-label">Overall score</div>
-          <div class="meta-value" id="scorePercent">0%</div>
-          <div class="progress-bar-shell">
-            <div class="progress-bar-fill" id="scoreBar"></div>
-          </div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-label">Items completed</div>
-          <div class="meta-value"><span id="completedCount">0</span>/<span id="totalCount">0</span></div>
-          <div class="progress-bar-shell">
-            <div class="progress-bar-fill" id="progressBar"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dashboard-section-title">Breakdown</div>
-      <div class="score-row">
-        <div>
-          <div class="score-main" id="rawScore">0 / 0</div>
-          <div class="score-sub" id="scoreSub">0 correct • 0 incorrect</div>
-        </div>
-      </div>
-
-      <div class="score-badges">
-        <span class="score-badge" id="conventionsBadge">Conventions: 0/0</span>
-        <span class="score-badge" id="revisionBadge">Revision: 0/0</span>
-        <span class="score-badge" id="organizationBadge">Org & Clarity: 0/0</span>
-      </div>
-
-      <div class="dashboard-section-title">Focus for this set</div>
-      <div class="pill-row">
-        <span class="pill">Editing underlined text</span>
-        <span class="pill">Grammar & usage</span>
-        <span class="pill">Capitalization & punctuation</span>
-        <span class="pill">Multi-select evidence</span>
-      </div>
-
-      <div class="dashboard-section-title">Session controls</div>
-      <div class="mini-list">
-        <p class="tag-lit"><strong>Single choice:</strong> One correct answer. Choose the best fix.</p>
-        <p class="tag-info"><strong>Multiple select:</strong> The prompt tells you. All correct options must be chosen to earn credit.</p>
-        <p><strong>Feedback:</strong> Every miss tells you why it’s wrong and what the correct choice is doing.</p>
-      </div>
-
-      <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn btn-ghost" id="restartBtn">Restart set</button>
-        <button class="btn btn-primary" id="summaryBtn">View summary</button>
-      </div>
-    </aside>
-
-    <main class="panel main-panel">
-      <section class="passage-card">
-        <div class="passage-label" id="passageLabel">Prompt • Editing Passage</div>
-        <h2 class="passage-title" id="passageTitle">Loading…</h2>
-        <div class="passage-body" id="passageBody"></div>
-      </section>
-
-      <section class="question-card">
-        <div class="question-header-row">
-          <div class="question-index" id="questionIndex">Question 1</div>
-          <div class="question-standard" id="questionStandard">Standard: —</div>
-        </div>
-        <div class="question-text" id="questionText">Loading question…</div>
-        <div class="question-extra" id="questionExtra"></div>
-
-        <div class="options-grid" id="optionsGrid"></div>
-
-        <div class="feedback-row">
-          <div class="feedback-icon correct hidden" id="feedbackIconCorrect">✓</div>
-          <div class="feedback-icon incorrect hidden" id="feedbackIconIncorrect">!</div>
-          <div class="feedback-text" id="feedbackText"></div>
-        </div>
-
-        <div class="explanation" id="explanationBox"></div>
-
-        <div class="nav-row">
-          <div class="nav-left">
-            <span id="navProgress">1 / 1</span> •
-            <span id="navType">Editing</span>
-          </div>
-          <div class="nav-right">
-            <span class="pill-mini" id="navTag">Subpart 4</span>
-            <button class="btn btn-ghost" id="submitMultiBtn" disabled>Submit answer</button>
-            <button class="btn btn-primary" id="nextBtn" disabled>
-              Next
-              <span id="nextLabelArrow">→</span>
-            </button>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <div class="modal-backdrop" id="summaryModal" data-open="false">
-    <div class="modal">
-      <h2>Session summary</h2>
-      <p id="summaryHeadline">You’ve completed this Subpart 4 practice set.</p>
-
-      <div class="summary-grid">
-        <div class="summary-card">
-          <div class="summary-label">Score</div>
-          <div class="summary-value" id="summaryScore">0%</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-label">Correct</div>
-          <div class="summary-value" id="summaryCorrect">0</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-label">Time</div>
-          <div class="summary-value" id="summaryTime">00:00</div>
-        </div>
-      </div>
-
-      <div class="mini-list" style="margin-top:10px;">
-        <p id="summaryConventions">Conventions: 0/0 correct</p>
-        <p id="summaryRevision">Revision: 0/0 correct</p>
-        <p id="summaryOrganization">Organization & Clarity: 0/0 correct</p>
-        <p><strong>Next move:</strong> Target the lowest strand first. Run again and watch the bars move.</p>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-ghost" id="closeSummaryBtn">Close</button>
-        <button class="btn btn-primary" id="restartFromSummaryBtn">Restart set</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const passages = [
-      {
-        id: "P1",
-        label: "Editing Passage • Narrative",
-        title: "The Field Trip That Almost Didn’t Happen",
-        body: [
-          "Yesterday our class _were going_ on a field trip to the science museum. Everyone was excited, but when we arrived at school, our teacher looked worried.",
-          "She explained that the bus driver _have not arrived_ yet. We waited in the hallway, listening to the rain _tap, tapped_ against the windows.",
-          "Finally, the bus pulled up, and we hurried outside. “Make sure you _has_ your permission slips,” our teacher reminded us.",
-          "I checked my backpack and felt my stomach drop — mine was missing. “I know I put it in here,” I said, _digging quick_ through my papers.",
-          "My friend Jordan helped me look. “Check the front pocket,” he suggested. There it was. I held it up, relieved. The teacher smiled and said, “Good. Now let’s go learn something amazing today.”"
-        ]
-      },
-      {
-        id: "P2",
-        label: "Editing Passage • Informational",
-        title: "How Bees Help Our World",
-        body: [
-          "Bees are small insects that play a _important_ role in nature. They help plants grow by carrying pollen from one flower to another. This process is called _polinashun_.",
-          "Bees live in groups called colonies. Each colony has a queen bee, worker bees, and drones. Worker bees gather nectar, which they turn into honey.",
-          "Honey is stored in _wax combs it_ protects the hive’s food supply.",
-          "Bees are helpful to humans too. Without bees, many fruits and vegetables _wouldn’t grow good_. Farmers sometimes bring beehives to their fields to help crops grow."
-        ]
-      },
-      {
-        id: "P3",
-        label: "Editing Passage • Opinion",
-        title: "Should Students Have Classroom Jobs?",
-        body: [
-          "In our classroom, some students think jobs are just extra work, but I disagree. Classroom jobs _helps_ us learn responsibility.",
-          "When students pass out papers, clean the board, or organize supplies, they are learning how to _manage they’re time_.",
-          "Classroom jobs also make the room feel like _it belongs to everyone_. Students take better care of a space when they have a role in it.",
-          "Some people say jobs take too much time, however, they actually save time because the teacher doesn’t have to do everything.",
-          "For these reasons, I believe every classroom _should of_ have jobs for students."
-        ]
-      }
-    ];
-
-    const questions = [
-      {
-        id: 1,
-        passageId: "P1",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Verb tense",
-        text: "Which correction is needed for the underlined phrase _were going_?",
-        extra: "",
-        options: [
-          { text: "was going", correct: true, why: "“Class” is singular, so it needs the singular verb “was.”" },
-          { text: "are going", correct: false, why: "This changes the sentence to present tense instead of past tense." },
-          { text: "were goes", correct: false, why: "This is not a correct verb form in this sentence." },
-          { text: "No change", correct: false, why: "“Class were going” is not correct subject-verb agreement." }
-        ],
-        explanation: "The subject “class” is singular, so the correct verb is “was going.”"
-      },
-      {
-        id: 2,
-        passageId: "P1",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Verb tense",
-        text: "Which correction is needed for the underlined phrase _have not arrived_?",
-        extra: "",
-        options: [
-          { text: "has not arrived", correct: true, why: "“Driver” is singular, so it needs the singular verb “has.”" },
-          { text: "have not arrives", correct: false, why: "“Arrives” does not match the helping verb “have.”" },
-          { text: "had not arrive", correct: false, why: "“Arrive” should be “arrived” to match “had.”" },
-          { text: "No change", correct: false, why: "“Driver have not arrived” is not correct subject-verb agreement." }
-        ],
-        explanation: "The singular subject “driver” needs the singular verb “has not arrived.”"
-      },
-      {
-        id: 3,
-        passageId: "P1",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.2 – Punctuation",
-        text: "Which option correctly revises the underlined phrase _tap, tapped_?",
-        extra: "",
-        options: [
-          { text: "tap tapped", correct: false, why: "This removes the comma but still repeats the word awkwardly." },
-          { text: "tap-tapped", correct: false, why: "The hyphen does not show the repeated sound clearly." },
-          { text: "tap, tap", correct: true, why: "The comma separates the repeated word to show the sound pattern clearly." },
-          { text: "No change", correct: false, why: "“tap, tapped” mixes two different verb forms." }
-        ],
-        explanation: "“Tap, tap” repeats the same word to show the sound of the rain clearly."
-      },
-      {
-        id: 4,
-        passageId: "P1",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Verb tense",
-        text: "Which correction is needed for the underlined word _has_ in “Make sure you has your permission slips”?",
-        extra: "",
-        options: [
-          { text: "have", correct: true, why: "“You” takes the verb “have,” not “has.”" },
-          { text: "had", correct: false, why: "“Had” changes the time and does not match the sentence." },
-          { text: "haves", correct: false, why: "“Haves” is not a correct verb form." },
-          { text: "No change", correct: false, why: "“You has” is not correct subject-verb agreement." }
-        ],
-        explanation: "The pronoun “you” always uses “have,” not “has.”"
-      },
-      {
-        id: 5,
-        passageId: "P1",
-        type: "single",
-        skill: "revision",
-        standard: "W.5.3d – Word choice",
-        text: "Which revision best improves the phrase _digging quick_?",
-        extra: "",
-        options: [
-          { text: "digging more quick", correct: false, why: "“More quick” is not standard grammar." },
-          { text: "digging quickly", correct: true, why: "“Quickly” is the correct adverb form to describe how the narrator is digging." },
-          { text: "digging quicklier", correct: false, why: "“Quicklier” is not a correct word." },
-          { text: "No change", correct: false, why: "“Digging quick” uses an adjective instead of an adverb." }
-        ],
-        explanation: "Adverbs describe how an action happens, so “quickly” is the best choice."
-      },
-      {
-        id: 6,
-        passageId: "P1",
-        type: "single",
-        skill: "revision",
-        standard: "W.5.3c – Sentence combining",
-        text: "Which sentence best combines the ideas in “There it was. I held it up, relieved.”?",
-        extra: "",
-        options: [
-          { text: "I found it in the front pocket and I was relieved.", correct: false, why: "This is correct but less precise and a bit wordy." },
-          { text: "I found it in the front pocket, relieved.", correct: false, why: "“Relieved” is not clearly connected to the subject." },
-          { text: "Relieved, I found it in the front pocket.", correct: false, why: "This suggests the narrator was relieved before finding it." },
-          { text: "I found it in the front pocket, and I was relieved to see it.", correct: true, why: "This clearly shows both the action and the feeling in one smooth sentence." }
-        ],
-        explanation: "The best revision keeps the meaning and connects the ideas smoothly."
-      },
-      {
-        id: 7,
-        passageId: "P2",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Articles",
-        text: "Which correction is needed for the underlined phrase _a important_?",
-        extra: "",
-        options: [
-          { text: "an important", correct: true, why: "Words that begin with a vowel sound use “an.”" },
-          { text: "the important", correct: false, why: "“The” changes the meaning and is not needed here." },
-          { text: "important", correct: false, why: "The sentence needs an article before “important.”" },
-          { text: "No change", correct: false, why: "“A important” does not match the vowel sound at the beginning of “important.”" }
-        ],
-        explanation: "“Important” begins with a vowel sound, so it needs “an.”"
-      },
-      {
-        id: 8,
-        passageId: "P2",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.2 – Spelling",
-        text: "Which correction is needed for the underlined word _polinashun_?",
-        extra: "",
-        options: [
-          { text: "pollination", correct: true, why: "This is the correct spelling of the science term." },
-          { text: "polination", correct: false, why: "It is missing an “l.”" },
-          { text: "pollonation", correct: false, why: "It has an extra “o.”" },
-          { text: "No change", correct: false, why: "The word is not spelled correctly in the passage." }
-        ],
-        explanation: "“Pollination” is the correct spelling for the process bees help with."
-      },
-      {
-        id: 9,
-        passageId: "P2",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Sentence structure",
-        text: "Which revision best corrects the sentence with the underlined phrase _wax combs it_?",
-        extra: "Honey is stored in _wax combs it_ protects the hive’s food supply.",
-        options: [
-          { text: "Honey is stored in wax combs, it protects the hive’s food supply.", correct: false, why: "This is still a run-on sentence joined only by a comma." },
-          { text: "Honey is stored in wax combs; it protects the hive’s food supply.", correct: true, why: "The semicolon correctly joins two related complete sentences." },
-          { text: "Honey is stored in wax combs it protects the hive’s food supply.", correct: false, why: "This is still a run-on sentence with no punctuation." },
-          { text: "Honey is stored in wax combs and it protects the hive’s food supply.", correct: false, why: "This is grammatical but less precise than separating the two ideas." }
-        ],
-        explanation: "A semicolon correctly joins two closely related complete sentences."
-      },
-      {
-        id: 10,
-        passageId: "P2",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Adverbs",
-        text: "Which correction is needed for the underlined phrase _wouldn’t grow good_?",
-        extra: "",
-        options: [
-          { text: "wouldn’t grow well", correct: true, why: "“Well” is the correct adverb to describe how something grows." },
-          { text: "wouldn’t grows good", correct: false, why: "“Grows” does not match “wouldn’t.”" },
-          { text: "wouldn’t grow goodly", correct: false, why: "“Goodly” is not used this way in standard English." },
-          { text: "No change", correct: false, why: "“Grow good” is not standard grammar." }
-        ],
-        explanation: "Adverbs like “well” describe how something happens, so “grow well” is correct."
-      },
-      {
-        id: 11,
-        passageId: "P2",
-        type: "single",
-        skill: "revision",
-        standard: "W.5.2d – Precise language",
-        text: "Which sentence best adds a supporting detail about why bees are important to humans?",
-        extra: "",
-        options: [
-          { text: "Bees are yellow and black and can be noisy.", correct: false, why: "This describes bees but does not explain why they are important to humans." },
-          { text: "Bees pollinate many crops, including apples, almonds, and blueberries that people eat.", correct: true, why: "This gives specific examples of foods that depend on bees." },
-          { text: "Bees sometimes fly near people and make them nervous.", correct: false, why: "This focuses on how people feel, not on why bees are helpful." },
-          { text: "Bees live in many different places around the world.", correct: false, why: "This is a fact but does not show why bees help humans." }
-        ],
-        explanation: "Specific examples of crops show clearly how bees help people."
-      },
-      {
-        id: 12,
-        passageId: "P2",
-        type: "multi",
-        skill: "conventions",
-        standard: "L.5.2 – Capitalization",
-        text: "MULTIPLE SELECT: Select TWO sentences that use capitalization correctly.",
-        extra: "You must select both correct sentences to receive credit.",
-        options: [
-          { text: "Bees live in groups called Colonies.", correct: false, why: "“Colonies” is not a proper noun here and should not be capitalized." },
-          { text: "Each colony has a queen bee.", correct: true, why: "No words in the middle of the sentence need capital letters." },
-          { text: "Worker Bees gather nectar.", correct: false, why: "“Bees” should not be capitalized in the middle of the sentence." },
-          { text: "Honey is stored in wax combs.", correct: true, why: "The sentence begins with a capital letter and uses lowercase correctly." }
-        ],
-        explanation: "Only sentences that follow capitalization rules for common and proper nouns are correct."
-      },
-      {
-        id: 13,
-        passageId: "P3",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Subject-verb agreement",
-        text: "Which correction is needed for the underlined word _helps_ in “Classroom jobs helps us learn responsibility”?",
-        extra: "",
-        options: [
-          { text: "help", correct: true, why: "The plural subject “jobs” needs the verb “help.”" },
-          { text: "helped", correct: false, why: "This changes the sentence to past tense." },
-          { text: "has helped", correct: false, why: "This changes the meaning and tense of the sentence." },
-          { text: "No change", correct: false, why: "“Jobs helps” is not correct subject-verb agreement." }
-        ],
-        explanation: "Plural subjects like “jobs” use the base verb form “help.”"
-      },
-      {
-        id: 14,
-        passageId: "P3",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Pronouns",
-        text: "Which correction is needed for the underlined phrase _manage they’re time_?",
-        extra: "",
-        options: [
-          { text: "manage their time", correct: true, why: "“Their” is the correct possessive pronoun to show ownership." },
-          { text: "manage there time", correct: false, why: "“There” shows a place, not ownership." },
-          { text: "manage they time", correct: false, why: "“They” is a subject pronoun, not possessive." },
-          { text: "No change", correct: false, why: "“They’re” means “they are,” which does not fit here." }
-        ],
-        explanation: "The sentence needs the possessive pronoun “their” to show that the time belongs to the students."
-      },
-      {
-        id: 15,
-        passageId: "P3",
-        type: "single",
-        skill: "revision",
-        standard: "W.5.1a – Opinion clarity",
-        text: "Which sentence best states the writer’s opinion clearly?",
-        extra: "",
-        options: [
-          { text: "In our classroom, some students think jobs are just extra work.", correct: false, why: "This explains what some students think, not the writer’s opinion." },
-          { text: "Classroom jobs are a good idea because they teach students responsibility.", correct: true, why: "This clearly states the opinion and gives a reason." },
-          { text: "Classroom jobs are something that happens in many schools.", correct: false, why: "This is a fact, not an opinion." },
-          { text: "Classroom jobs can be fun sometimes.", correct: false, why: "This is a weak opinion and does not match the reasons in the passage." }
-        ],
-        explanation: "A strong opinion statement clearly shows what the writer believes and gives a reason."
-      },
-      {
-        id: 16,
-        passageId: "P3",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Verb tense",
-        text: "Which correction is needed for the underlined phrase _should of_ in the last sentence?",
-        extra: "",
-        options: [
-          { text: "should have", correct: true, why: "“Should have” is the correct verb phrase." },
-          { text: "should had", correct: false, why: "“Should had” is not a correct verb phrase." },
-          { text: "should has", correct: false, why: "“Should has” is not a correct verb phrase." },
-          { text: "No change", correct: false, why: "“Should of” is not standard English." }
-        ],
-        explanation: "The correct phrase is “should have,” not “should of.”"
-      },
-      {
-        id: 17,
-        passageId: "P3",
-        type: "multi",
-        skill: "organization",
-        standard: "W.5.1c – Transitions",
-        text: "MULTIPLE SELECT: Select TWO transitions that would best connect reasons in this opinion essay.",
-        extra: "You must select both correct transitions to receive credit.",
-        options: [
-          { text: "For example,", correct: true, why: "This introduces a specific example to support a reason." },
-          { text: "In addition,", correct: true, why: "This adds another reason to support the opinion." },
-          { text: "Finally,", correct: false, why: "This is better for a concluding reason, not for connecting reasons in the middle." },
-          { text: "Afterward,", correct: false, why: "This shows time order, not adding reasons." }
-        ],
-        explanation: "Opinion writing often uses transitions like “For example,” and “In addition,” to connect reasons."
-      },
-      {
-        id: 18,
-        passageId: "P1",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.2 – Quotation marks",
-        text: "Which sentence uses quotation marks and commas correctly?",
-        extra: "",
-        options: [
-          { text: "“Check the front pocket” he suggested.", correct: false, why: "It is missing a comma before the closing quotation mark." },
-          { text: "“Check the front pocket,” he suggested.", correct: true, why: "The comma comes before the closing quotation mark, and the sentence is punctuated correctly." },
-          { text: "“Check the front pocket,” He suggested.", correct: false, why: "“He” should not be capitalized in the middle of the sentence." },
-          { text: "“Check the front pocket”. he suggested.", correct: false, why: "The period should be inside the quotation marks." }
-        ],
-        explanation: "Dialogue needs quotation marks and a comma before the closing quotation mark when a tag follows."
-      },
-      {
-        id: 19,
-        passageId: "P2",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.1 – Prepositions",
-        text: "Which sentence uses prepositions correctly?",
-        extra: "",
-        options: [
-          { text: "The plant sits between the window to the bookshelf.", correct: false, why: "“Between” and “to” do not work together correctly here." },
-          { text: "The plant sits under the window and next of the bookshelf.", correct: false, why: "“Next of” is not a correct prepositional phrase." },
-          { text: "The plant sits near the window and next to the bookshelf.", correct: true, why: "Both “near” and “next to” are correct prepositional phrases." },
-          { text: "The plant sits over the window and beside of the bookshelf.", correct: false, why: "“Beside of” is not standard usage." }
-        ],
-        explanation: "“Near the window” and “next to the bookshelf” are both correct prepositional phrases."
-      },
-      {
-        id: 20,
-        passageId: "P3",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.2 – Apostrophes",
-        text: "Which sentence uses apostrophes correctly?",
-        extra: "",
-        options: [
-          { text: "The students playground is everyones favorite place.", correct: false, why: "Both “students” and “everyones” need apostrophes to show possession." },
-          { text: "The students’ playground is everyone’s favorite place.", correct: true, why: "Both possessive nouns are formed correctly." },
-          { text: "The student’s playground is everyones’ favorite place.", correct: false, why: "“Everyones’” is not correct; “everyone” is already singular." },
-          { text: "The students playground is everyones’ favorite place.", correct: false, why: "Neither possessive noun is written correctly." }
-        ],
-        explanation: "Possessive nouns need apostrophes to show ownership."
-      },
-      {
-        id: 21,
-        passageId: "P1",
-        type: "single",
-        skill: "revision",
-        standard: "RL.5.1 – Inference",
-        text: "Part A: What can the reader infer about the narrator when the permission slip is missing?",
-        extra: "",
-        options: [
-          { text: "The narrator does not care about the field trip.", correct: false, why: "The narrator feels worried, not uncaring." },
-          { text: "The narrator is careless and always loses things.", correct: false, why: "The passage does not say this happens often." },
-          { text: "The narrator is responsible and wants to fix the problem.", correct: true, why: "The narrator searches quickly and asks for help to find the slip." },
-          { text: "The narrator is angry at the teacher.", correct: false, why: "The narrator never shows anger toward the teacher." }
-        ],
-        explanation: "The narrator’s actions show that they care about solving the problem."
-      },
-      {
-        id: 22,
-        passageId: "P1",
-        type: "multi",
-        skill: "revision",
-        standard: "RL.5.1 – Evidence",
-        text: "Part B: MULTIPLE SELECT: Which TWO details from the passage best support the answer to Part A?",
-        extra: "You must select both correct details to receive credit.",
-        options: [
-          { text: "“Everyone was excited.”", correct: false, why: "This shows how the class feels, not the narrator’s responsibility." },
-          { text: "“I checked my backpack and felt my stomach drop — mine was missing.”", correct: true, why: "This shows the narrator’s worried reaction when the slip is missing." },
-          { text: "“My friend Jordan helped me look.”", correct: false, why: "This shows Jordan’s actions, not the narrator’s responsibility." },
-          { text: "“I know I put it in here,” I said, digging quickly through my papers.", correct: true, why: "This shows the narrator actively searching to fix the problem." }
-        ],
-        explanation: "Evidence that shows worry and active problem-solving supports the inference about responsibility."
-      },
-      {
-        id: 23,
-        passageId: "P2",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.2 – Commas",
-        text: "Which sentence uses commas correctly in a compound sentence?",
-        extra: "",
-        options: [
-          { text: "Bees are helpful to humans too, and they help crops grow.", correct: true, why: "The comma correctly comes before the conjunction joining two complete thoughts." },
-          { text: "Bees are helpful to humans too and, they help crops grow.", correct: false, why: "The comma is in the wrong place." },
-          { text: "Bees are helpful to humans too and they help crops grow.", correct: false, why: "A comma is needed before “and” to join two complete sentences." },
-          { text: "Bees are helpful to humans too, they help crops grow.", correct: false, why: "This is a comma splice joining two sentences with only a comma." }
-        ],
-        explanation: "A comma before the conjunction correctly joins two complete sentences."
-      },
-      {
-        id: 24,
-        passageId: "P3",
-        type: "single",
-        skill: "conventions",
-        standard: "L.5.2 – End punctuation",
-        text: "Which sentence uses end punctuation correctly?",
-        extra: "",
-        options: [
-          { text: "Should every classroom have jobs for students.", correct: false, why: "This is a question and needs a question mark." },
-          { text: "Every classroom should have jobs for students?", correct: false, why: "This is a statement, not a question." },
-          { text: "Every classroom should have jobs for students.", correct: true, why: "This is a statement and correctly ends with a period." },
-          { text: "Should every classroom have jobs for students!", correct: false, why: "This is a question and should not end with an exclamation mark." }
-        ],
-        explanation: "Statements end with periods, and questions end with question marks."
-      }
-    ];
-
-    let currentIndex = 0;
-    let answered = {};
-    let correctCount = 0;
-    let incorrectCount = 0;
-    let conventionsCorrect = 0;
-    let conventionsTotal = 0;
-    let revisionCorrect = 0;
-    let revisionTotal = 0;
-    let organizationCorrect = 0;
-    let organizationTotal = 0;
-    let startTime = Date.now();
-    let elapsedBeforePause = 0;
-    let timerInterval = null;
-    let isPaused = false;
-
-    const passageLabelEl = document.getElementById("passageLabel");
-    const passageTitleEl = document.getElementById("passageTitle");
-    const passageBodyEl = document.getElementById("passageBody");
-
-    const questionIndexEl = document.getElementById("questionIndex");
-    const questionStandardEl = document.getElementById("questionStandard");
-    const questionTextEl = document.getElementById("questionText");
-    const questionExtraEl = document.getElementById("questionExtra");
-    const optionsGridEl = document.getElementById("optionsGrid");
-
-    const feedbackIconCorrectEl = document.getElementById("feedbackIconCorrect");
-    const feedbackIconIncorrectEl = document.getElementById("feedbackIconIncorrect");
-    const feedbackTextEl = document.getElementById("feedbackText");
-    const explanationBoxEl = document.getElementById("explanationBox");
-
-    const navProgressEl = document.getElementById("navProgress");
-    const navTypeEl = document.getElementById("navType");
-    const navTagEl = document.getElementById("navTag");
-    const nextBtn = document.getElementById("nextBtn");
-    const submitMultiBtn = document.getElementById("submitMultiBtn");
-
-    const scorePercentEl = document.getElementById("scorePercent");
-    const scoreBarEl = document.getElementById("scoreBar");
-    const progressBarEl = document.getElementById("progressBar");
-    const completedCountEl = document.getElementById("completedCount");
-    const totalCountEl = document.getElementById("totalCount");
-    const rawScoreEl = document.getElementById("rawScore");
-    const scoreSubEl = document.getElementById("scoreSub");
-    const conventionsBadgeEl = document.getElementById("conventionsBadge");
-    const revisionBadgeEl = document.getElementById("revisionBadge");
-    const organizationBadgeEl = document.getElementById("organizationBadge");
-
-    const timerEl = document.getElementById("timer");
-    const timerValueEl = document.getElementById("timerValue");
-    const pauseBtn = document.getElementById("pauseBtn");
-    const resumeBtn = document.getElementById("resumeBtn");
-
-    const restartBtn = document.getElementById("restartBtn");
-    const summaryBtn = document.getElementById("summaryBtn");
-
-    const summaryModalEl = document.getElementById("summaryModal");
-    const summaryScoreEl = document.getElementById("summaryScore");
-    const summaryCorrectEl = document.getElementById("summaryCorrect");
-    const summaryTimeEl = document.getElementById("summaryTime");
-    const summaryConventionsEl = document.getElementById("summaryConventions");
-    const summaryRevisionEl = document.getElementById("summaryRevision");
-    const summaryOrganizationEl = document.getElementById("summaryOrganization");
-    const summaryHeadlineEl = document.getElementById("summaryHeadline");
-    const closeSummaryBtn = document.getElementById("closeSummaryBtn");
-    const restartFromSummaryBtn = document.getElementById("restartFromSummaryBtn");
-
-    function formatTime(seconds) {
-      const m = Math.floor(seconds / 60);
-      const s = seconds % 60;
-      return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-    }
-
-    function getElapsedSeconds() {
-      if (isPaused) return elapsedBeforePause;
-      return elapsedBeforePause + Math.floor((Date.now() - startTime) / 1000);
-    }
-
-    function updateTimerDisplay() {
-      const elapsedSec = getElapsedSeconds();
-      timerValueEl.textContent = formatTime(elapsedSec);
-
-      if (elapsedSec > 150 * 60) {
-        timerEl.dataset.state = "danger";
-      } else if (elapsedSec > 90 * 60) {
-        timerEl.dataset.state = "warning";
-      } else {
-        timerEl.dataset.state = "ok";
-      }
-    }
-
-    function startTimer() {
-      if (timerInterval) clearInterval(timerInterval);
-      startTime = Date.now();
-      isPaused = false;
-      pauseBtn.disabled = false;
-      resumeBtn.disabled = true;
-      timerInterval = setInterval(updateTimerDisplay, 1000);
-    }
-
-    function pauseTimer() {
-      if (isPaused) return;
-      elapsedBeforePause = getElapsedSeconds();
-      isPaused = true;
-      if (timerInterval) clearInterval(timerInterval);
-      pauseBtn.disabled = true;
-      resumeBtn.disabled = false;
-    }
-
-    function resumeTimer() {
-      if (!isPaused) return;
-      isPaused = false;
-      startTime = Date.now();
-      pauseBtn.disabled = false;
-      resumeBtn.disabled = true;
-      timerInterval = setInterval(updateTimerDisplay, 1000);
-    }
-
-    function loadQuestion(index) {
-      const q = questions[index];
-      if (!q) return;
-
-      const passage = passages.find(p => p.id === q.passageId) || passages[0];
-
-      passageLabelEl.textContent = passage.label;
-      passageTitleEl.textContent = passage.title;
-      passageBodyEl.innerHTML = "";
-      passage.body.forEach(par => {
-        const p = document.createElement("p");
-        p.textContent = par;
-        passageBodyEl.appendChild(p);
-      });
-
-      questionIndexEl.textContent = `Question ${index + 1}`;
-      questionStandardEl.textContent = `Standard: ${q.standard}`;
-      questionTextEl.textContent = q.text;
-      questionExtraEl.textContent = q.extra || "";
-
-      navProgressEl.textContent = `${index + 1} / ${questions.length}`;
-      navTypeEl.textContent =
-        q.skill === "conventions"
-          ? "Conventions"
-          : q.skill === "organization"
-          ? "Organization"
-          : "Revision";
-      navTagEl.textContent = q.type === "multi" ? "Multiple Select" : "Single Choice";
-
-      if (q.type === "multi") {
-        submitMultiBtn.classList.remove("hidden");
-        submitMultiBtn.disabled = true;
-      } else {
-        submitMultiBtn.classList.add("hidden");
-        submitMultiBtn.disabled = true;
-      }
-
-      const optionIndices = q.options.map((_, i) => i);
-      for (let i = optionIndices.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [optionIndices[i], optionIndices[j]] = [optionIndices[j], optionIndices[i]];
-      }
-
-      optionsGridEl.innerHTML = "";
-      optionIndices.forEach((optIndex, displayIndex) => {
-        const opt = q.options[optIndex];
-        const btn = document.createElement("button");
-        btn.className = "option-btn";
-        btn.dataset.optionIndex = optIndex;
-
-        const keySpan = document.createElement("span");
-        keySpan.className = "option-key";
-        keySpan.textContent = String.fromCharCode(65 + displayIndex);
-
-        const textSpan = document.createElement("span");
-        textSpan.textContent = opt.text;
-
-        btn.appendChild(keySpan);
-        btn.appendChild(textSpan);
-
-        btn.addEventListener("click", () => handleOptionClick(btn, q, optIndex));
-        optionsGridEl.appendChild(btn);
-      });
-
-      feedbackIconCorrectEl.classList.add("hidden");
-      feedbackIconIncorrectEl.classList.add("hidden");
-      feedbackTextEl.textContent = "";
-      explanationBoxEl.dataset.visible = "false";
-      explanationBoxEl.textContent = "";
-      nextBtn.disabled = true;
-      nextBtn.textContent = index === questions.length - 1 ? "Finish" : "Next";
-      if (index !== questions.length - 1) {
-        const span = document.createElement("span");
-        span.id = "nextLabelArrow";
-        span.textContent = "→";
-        nextBtn.appendChild(span);
-      }
-    }
-
-    function handleOptionClick(btn, q, chosenIndex) {
-      if (answered[q.id]) return;
-
-      if (q.type === "single") {
-        gradeSingle(btn, q, chosenIndex);
-      } else {
-        toggleMulti(btn);
-        const selected = getSelectedMultiIndices();
-        submitMultiBtn.disabled = selected.length === 0;
-      }
-    }
-
-    function gradeSingle(btn, q, chosenIndex) {
-      const isCorrect = q.options[chosenIndex].correct;
-      answered[q.id] = { correct: isCorrect };
-
-      const allButtons = optionsGridEl.querySelectorAll(".option-btn");
-      allButtons.forEach(b => {
-        b.disabled = true;
-      });
-
-      allButtons.forEach(b => {
-        const idx = Number(b.dataset.optionIndex);
-        if (q.options[idx].correct) {
-          b.dataset.state = "correct";
-        }
-      });
-
-      if (isCorrect) {
-        btn.dataset.state = "correct";
-        correctCount++;
-        if (q.skill === "conventions") conventionsCorrect++;
-        if (q.skill === "revision") revisionCorrect++;
-        if (q.skill === "organization") organizationCorrect++;
-
-        feedbackIconCorrectEl.classList.remove("hidden");
-        feedbackIconIncorrectEl.classList.add("hidden");
-        feedbackTextEl.innerHTML = "<strong>Correct.</strong> Your choice matches the strongest TCAP-style fix.";
-      } else {
-        btn.dataset.state = "incorrect";
-        incorrectCount++;
-
-        feedbackIconCorrectEl.classList.add("hidden");
-        feedbackIconIncorrectEl.classList.remove("hidden");
-        const why = q.options[chosenIndex].why || "This option does not match the conventions or meaning needed.";
-        feedbackTextEl.innerHTML = `<strong>Not yet.</strong> ${why}`;
-      }
-
-      explanationBoxEl.dataset.visible = "true";
-      explanationBoxEl.textContent = q.explanation;
-
-      updateScoreUI();
-      nextBtn.disabled = false;
-    }
-
-    function toggleMulti(btn) {
-      const state = btn.dataset.state;
-      if (state === "selected") {
-        btn.dataset.state = "";
-      } else {
-        btn.dataset.state = "selected";
-      }
-    }
-
-    function getSelectedMultiIndices() {
-      const selected = [];
-      const allButtons = optionsGridEl.querySelectorAll(".option-btn");
-      allButtons.forEach(b => {
-        if (b.dataset.state === "selected") {
-          selected.push(Number(b.dataset.optionIndex));
-        }
-      });
-      return selected;
-    }
-
-    function gradeMulti(q, selectedIndices) {
-      const correctIndices = q.options
-        .map((opt, idx) => (opt.correct ? idx : -1))
-        .filter(idx => idx !== -1);
-
-      const allButtons = optionsGridEl.querySelectorAll(".option-btn");
-      allButtons.forEach(b => {
-        b.disabled = true;
-      });
-
-      allButtons.forEach(b => {
-        const idx = Number(b.dataset.optionIndex);
-        if (q.options[idx].correct) {
-          b.dataset.state = "correct";
-        }
-      });
-
-      const selectedSet = new Set(selectedIndices);
-      const correctSet = new Set(correctIndices);
-
-      let allCorrectChosen = true;
-      if (selectedSet.size !== correctSet.size) {
-        allCorrectChosen = false;
-      } else {
-        for (const idx of correctSet) {
-          if (!selectedSet.has(idx)) {
-            allCorrectChosen = false;
-            break;
-          }
-        }
-      }
-
-      answered[q.id] = { correct: allCorrectChosen };
-
-      if (allCorrectChosen) {
-        correctCount++;
-        if (q.skill === "conventions") conventionsCorrect++;
-        if (q.skill === "revision") revisionCorrect++;
-        if (q.skill === "organization") organizationCorrect++;
-
-        feedbackIconCorrectEl.classList.remove("hidden");
-        feedbackIconIncorrectEl.classList.add("hidden");
-        feedbackTextEl.innerHTML = "<strong>Correct.</strong> You selected all of the correct options and no incorrect ones.";
-      } else {
-        incorrectCount++;
-
-        feedbackIconCorrectEl.classList.add("hidden");
-        feedbackIconIncorrectEl.classList.remove("hidden");
-
-        const wrongPieces = [];
-        selectedIndices.forEach(idx => {
-          if (!q.options[idx].correct) {
-            wrongPieces.push(q.options[idx].why || "One selected option does not match the requirement.");
-          }
-        });
-        if (wrongPieces.length === 0) {
-          wrongPieces.push("You did not select all of the correct options.");
-        }
-        feedbackTextEl.innerHTML = `<strong>Not yet.</strong> ${wrongPieces[0]} Remember: you must select all correct options and no incorrect ones.`;
-      }
-
-      explanationBoxEl.dataset.visible = "true";
-      explanationBoxEl.textContent = q.explanation;
-
-      updateScoreUI();
-      nextBtn.disabled = false;
-      submitMultiBtn.disabled = true;
-    }
-
-    function updateScoreUI() {
-      const totalAnswered = Object.keys(answered).length;
-      const totalQuestions = questions.length;
-
-      completedCountEl.textContent = totalAnswered;
-      totalCountEl.textContent = totalQuestions;
-
-      const percent = totalQuestions === 0 ? 0 : Math.round((correctCount / totalQuestions) * 100);
-      scorePercentEl.textContent = `${percent}%`;
-      scoreBarEl.style.width = `${percent}%`;
-
-      const progressPercent = totalQuestions === 0 ? 0 : Math.round((totalAnswered / totalQuestions) * 100);
-      progressBarEl.style.width = `${progressPercent}%`;
-
-      rawScoreEl.textContent = `${correctCount} / ${totalQuestions}`;
-      scoreSubEl.textContent = `${correctCount} correct • ${incorrectCount} incorrect`;
-
-      conventionsTotal = questions.filter(q => q.skill === "conventions").length;
-      revisionTotal = questions.filter(q => q.skill === "revision").length;
-      organizationTotal = questions.filter(q => q.skill === "organization").length;
-
-      conventionsBadgeEl.textContent = `Conventions: ${conventionsCorrect}/${conventionsTotal}`;
-      revisionBadgeEl.textContent = `Revision: ${revisionCorrect}/${revisionTotal}`;
-      organizationBadgeEl.textContent = `Org & Clarity: ${organizationCorrect}/${organizationTotal}`;
-    }
-
-    function goToNextQuestion() {
-      if (currentIndex < questions.length - 1) {
-        currentIndex++;
-        loadQuestion(currentIndex);
-      } else {
-        openSummary();
-      }
-    }
-
-    function resetSession() {
-      currentIndex = 0;
-      answered = {};
-      correctCount = 0;
-      incorrectCount = 0;
-      conventionsCorrect = 0;
-      revisionCorrect = 0;
-      organizationCorrect = 0;
-      elapsedBeforePause = 0;
-      isPaused = false;
-      updateScoreUI();
-      startTimer();
-      loadQuestion(currentIndex);
-    }
-
-    function openSummary() {
-      const totalQuestions = questions.length;
-      const percent = totalQuestions === 0 ? 0 : Math.round((correctCount / totalQuestions) * 100);
-      summaryScoreEl.textContent = `${percent}%`;
-      summaryCorrectEl.textContent = `${correctCount}/${totalQuestions}`;
-      summaryTimeEl.textContent = formatTime(getElapsedSeconds());
-      summaryConventionsEl.textContent = `Conventions: ${conventionsCorrect}/${conventionsTotal} correct`;
-      summaryRevisionEl.textContent = `Revision: ${revisionCorrect}/${revisionTotal} correct`;
-      summaryOrganizationEl.textContent = `Organization & Clarity: ${organizationCorrect}/${organizationTotal} correct`;
-
-      if (percent >= 80) {
-        summaryHeadlineEl.textContent = "Your editing brain is hot. Now chase the last few misses.";
-      } else if (percent >= 60) {
-        summaryHeadlineEl.textContent = "Solid baseline. Next run, target the lowest strand and compare the bars.";
-      } else {
-        summaryHeadlineEl.textContent = "This is your starting line, not your ceiling. Run it again and watch the growth.";
-      }
-
-      summaryModalEl.dataset.open = "true";
-    }
-
-    function closeSummary() {
-      summaryModalEl.dataset.open = "false";
-    }
-
-    nextBtn.addEventListener("click", goToNextQuestion);
-    restartBtn.addEventListener("click", resetSession);
-    summaryBtn.addEventListener("click", openSummary);
-    closeSummaryBtn.addEventListener("click", closeSummary);
-    restartFromSummaryBtn.addEventListener("click", () => {
-      closeSummary();
-      resetSession();
-    });
-
-    pauseBtn.addEventListener("click", pauseTimer);
-    resumeBtn.addEventListener("click", resumeTimer);
-
-    submitMultiBtn.addEventListener("click", () => {
-      const q = questions[currentIndex];
-      if (!q || q.type !== "multi" || answered[q.id]) return;
-      const selected = getSelectedMultiIndices();
-      if (selected.length === 0) return;
-      gradeMulti(q, selected);
-    });
-
-    window.addEventListener("load", () => {
-      totalCountEl.textContent = questions.length;
-      updateScoreUI();
-      startTimer();
-      loadQuestion(currentIndex);
-    });
-  </script>
-</body>
-</html>
+/* ————————————————————————————————
+   LILAC UPGRADED UI — FULL CSS
+———————————————————————————————— */
+
+:root {
+  --lilac-main: #b38cff;
+  --lilac-dark: #7a5ad9;
+  --lilac-soft: #f4efff;
+  --accent-green: #2eaf7d;
+  --accent-red: #e0526f;
+  --bg-deep: #0f0b1a;
+  --card-bg: #181326;
+  --text-main: #000000;
+  --text-light: #f7f4ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #2b1f4a 0, #0b0714 45%, #05030a 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* Layout */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 18px;
+  width: min(1200px, 100%);
+  padding: 18px;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Panels */
+
+.panel {
+  background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.6),
+    0 0 0 1px rgba(255,255,255,0.02);
+  backdrop-filter: blur(18px);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(179,140,255,0.18), transparent 55%),
+    radial-gradient(circle at 100% 0%, rgba(255,255,255,0.06), transparent 55%);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.main-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text-main);
+}
+
+/* Header / avatar */
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.title-block h1 {
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--lilac-soft);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.title-block p {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: rgba(244,239,255,0.8);
+}
+
+.chip {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(179,140,255,0.16);
+  color: var(--lilac-soft);
+  border: 1px solid rgba(179,140,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  background: radial-gradient(circle at 30% 0%, #ffe27a 0, #f7b733 30%, #f05a28 70%, #7a5ad9 100%);
+  position: relative;
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.18),
+    0 10px 20px rgba(0,0,0,0.6);
+  overflow: hidden;
+}
+
+.avatar::after {
+  content: "";
+  position: absolute;
+  inset: 18% 22%;
+  border-radius: 999px;
+  border: 2px solid #f7f4ff;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(18deg);
+}
+
+.avatar-text {
+  font-size: 0.8rem;
+  color: rgba(244,239,255,0.9);
+}
+
+.avatar-text strong {
+  color: var(--lilac-soft);
+}
+
+/* Dashboard */
+
+.dashboard-section-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(244,239,255,0.8);
+  margin: 10px 0 4px;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.meta-card {
+  background: rgba(8,4,20,0.8);
+  border-radius: 12px;
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--lilac-soft);
+  font-size: 0.75rem;
+}
+
+.meta-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.65rem;
+  opacity: 0.7;
+  margin-bottom: 2px;
+}
+
+.meta-value {
+  font-weight: 600;
+}
+
+.progress-bar-shell {
+  margin-top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--lilac-main), #ffb86c);
+  transition: width 0.25s ease-out;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.score-main {
+  font-size: 1.4rem;
+  color: var(--lilac-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-sub {
+  font-size: 0.8rem;
+  color: rgba(244,239,255,0.8);
+}
+
+.score-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.score-badge {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(8,4,20,0.9);
+  border: 1px solid rgba(244,239,255,0.16);
+  color: rgba(244,239,255,0.9);
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.pill {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(244,239,255,0.2);
+  color: rgba(244,239,255,0.9);
+  background: rgba(8,4,20,0.7);
+}
+
+.mini-list {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: rgba(244,239,255,0.9);
+}
+
+.mini-list p {
+  margin: 2px 0;
+}
+
+.tag-lit {
+  border-left: 3px solid #ffb86c;
+  padding-left: 6px;
+}
+
+.tag-info {
+  border-left: 3px solid #2eaf7d;
+  padding-left: 6px;
+}
+
+.control-row {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Timer */
+
+.timer-floating {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 50;
+  background: rgba(8,4,20,0.92);
+  border-radius: 999px;
+  padding: 6px 12px;
+  border: 1px solid rgba(179,140,255,0.7);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--lilac-soft);
+}
+
+.timer-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 10px rgba(46,175,125,0.9);
+}
+
+.timer-floating[data-state="warning"] .timer-dot {
+  background: #ffb86c;
+  box-shadow: 0 0 10px rgba(255,184,108,0.9);
+}
+
+.timer-floating[data-state="danger"] .timer-dot {
+  background: var(--accent-red);
+  box-shadow: 0 0 10px rgba(224,82,111,0.9);
+}
+
+.timer-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.65rem;
+  opacity: 0.8;
+}
+
+.timer-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+.timer-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(244,239,255,0.4);
+  background: transparent;
+  color: var(--lilac-soft);
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+
+.timer-btn:hover:not(:disabled) {
+  background: rgba(244,239,255,0.08);
+}
+
+/* Passage */
+
+.passage-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(0,0,0,0.08);
+  max-height: 260px;
+  overflow: auto;
+}
+
+.passage-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7a5ad9;
+  margin-bottom: 2px;
+}
+
+.passage-title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  color: #1b1335;
+}
+
+.passage-body p {
+  margin: 4px 0;
+  font-size: 0.86rem;
+  color: #222222;
+}
+
+/* Question */
+
+.question-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 16px 16px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.question-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.question-index {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7a5ad9;
+}
+
+.question-standard {
+  font-size: 0.7rem;
+  color: #555;
+}
+
+.question-text {
+  font-size: 0.95rem;
+  color: #000000;
+  margin-bottom: 6px;
+}
+
+.question-extra {
+  font-size: 0.8rem;
+  color: #444;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+/* Options */
+
+.options-grid {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.option-btn {
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.12);
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  background: #ffffff;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.16s ease-out;
+  text-align: left;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--lilac-main);
+  box-shadow: 0 0 0 1px rgba(179,140,255,0.4);
+  transform: translateY(-1px);
+}
+
+.option-btn[data-state="selected"] {
+  background: #e6ddff;
+  border-color: var(--lilac-dark);
+  box-shadow: 0 0 0 1px rgba(122,90,217,0.7);
+}
+
+.option-btn[data-state="correct"] {
+  background: #e0f7ef;
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 1px rgba(46,175,125,0.7);
+}
+
+.option-btn[data-state="incorrect"] {
+  background: #ffe6ee;
+  border-color: var(--accent-red);
+  box-shadow: 0 0 0 1px rgba(224,82,111,0.7);
+}
+
+.option-key {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Feedback */
+
+.feedback-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+  min-height: 24px;
+}
+
+.feedback-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.feedback-icon.correct {
+  background: var(--accent-green);
+}
+
+.feedback-icon.incorrect {
+  background: var(--accent-red);
+}
+
+.feedback-text {
+  color: #222;
+}
+
+.feedback-text strong {
+  font-weight: 600;
+}
+
+.explanation {
+  font-size: 0.8rem;
+  color: #444;
+  background: #f7f3ff;
+  border-radius: 10px;
+  padding: 6px 8px;
+  border: 1px dashed rgba(122,90,217,0.5);
+  display: none;
+}
+
+.explanation[data-visible="true"] {
+  display: block;
+}
+
+/* Nav row */
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.nav-left {
+  font-size: 0.8rem;
+  color: #333;
+}
+
+.nav-left span {
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pill-mini {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(122,90,217,0.1);
+  color: #7a5ad9;
+  border: 1px solid rgba(122,90,217,0.4);
+}
+
+/* Buttons */
+
+.btn {
+  border-radius: 999px;
+  border: none;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  transition: all 0.16s ease-out;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--lilac-main), var(--lilac-dark));
+  color: #ffffff;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(0,0,0,0.6);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--lilac-soft);
+  border: 1px solid rgba(122,90
